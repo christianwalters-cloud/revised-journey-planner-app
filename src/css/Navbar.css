@@ -1,0 +1,59 @@
+/* Path: src/css/Navbar.css */
+
+.navbar {
+  background-color: var(--bg-card);
+  border-bottom: 1px solid var(--border-color);
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: var(--transition-smooth);
+}
+
+.navbar-logo a {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-main);
+  text-decoration: none;
+}
+
+.navbar-menu {
+  display: flex;
+  list-style: none;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.navbar-menu .nav-link {
+  color: var(--text-main);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.95rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  transition: var(--transition-smooth);
+}
+
+.navbar-menu .nav-link:hover {
+  background-color: var(--bg-primary);
+}
+
+/* State-based modifications targeting matching class names */
+.nav-link.status-locked {
+  color: var(--text-muted) !important;
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.nav-link.status-locked:hover {
+  background-color: transparent;
+}
+
+.nav-link.status-unlocked {
+  color: var(--color-unlocked) !important;
+  font-weight: 600;
+}
+
+.nav-link.status-done {
+  color: var(--color-done) !important;
+}

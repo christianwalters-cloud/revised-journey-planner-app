@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-function Navbar() {
+function Navbar({lockStatuses = {}, handleNavigationClick}) {
   const navLockedItemsList = [
     { key: "morning", path: "/morning-routine", label: "Morning Routine" },
     { key: "todo", path: "/todo", label: "To Do List" },
@@ -10,19 +10,19 @@ function Navbar() {
   return (
     <nav className="navbar">
       <div>
-        <Link>Journey</Link>
+        <Link to='/'>Journey</Link>
       </div>
 
       <ul className="navbar-menu">
         {navLockedItemsList.map(({ key, path, label }) => {
           const status = lockStatuses?.[key] || "locked";
           const isDone = status === "done";
-          const isUnlocked = status === "unlocked";
+          const isUnlocked = status === "unlocked" || isDone;
 
-          return;
+          return(
           <li key={key}>
             <Link
-              to={isUnlocked ? path : "/"}
+              to={isUnlocked ?  path : "#"}
               onClick={(e) => handleNavigationClick(e, status)}
               className={`nav-link status-${status}`}
             >
@@ -34,7 +34,8 @@ function Navbar() {
                 </>
               )}
             </Link>
-          </li>;
+          </li>
+          );
         })}
 
         <li>
