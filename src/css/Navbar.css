@@ -1,8 +1,9 @@
-/* Path: src/css/Navbar.css */
-
+/* ==========================================================================
+   1. Core Layout Containers
+   ========================================================================== */
 .navbar {
   background-color: var(--bg-card);
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 0.0625rem solid var(--border-color);
   padding: 1rem 2rem;
   display: flex;
   justify-content: space-between;
@@ -10,11 +11,11 @@
   transition: var(--transition-smooth);
 }
 
-.navbar-logo a {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: var(--text-main);
-  text-decoration: none;
+.navbar div, 
+.navbar-menu li {
+  display: flex;
+  align-items: center;
+  gap: 10px;           
 }
 
 .navbar-menu {
@@ -22,38 +23,104 @@
   list-style: none;
   gap: 1.5rem;
   align-items: center;
+  margin: 0;
+  padding: 0;
 }
 
-.navbar-menu .nav-link {
-  color: var(--text-main);
+/* ==========================================================================
+   2. Shared Base Styles (Icons & Links)
+   ========================================================================== */
+.nav-menu-icon,
+.nav-icon {
+  width: 24px;         
+  height: 24px;        
+  object-fit: contain; 
+  transition: filter 0.25s ease-in-out;
+}
+
+.nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text-main); 
   text-decoration: none;
   font-weight: 500;
   font-size: 0.95rem;
   padding: 0.5rem 0.75rem;
-  border-radius: 6px;
+  border-radius: 0.375rem;
   transition: var(--transition-smooth);
 }
 
-.navbar-menu .nav-link:hover {
+.nav-link:hover {
   background-color: var(--bg-primary);
+  color: var(--color-unlocked); 
+  text-decoration: none;
 }
 
-/* State-based modifications targeting matching class names */
+.nav-link:hover .nav-menu-icon {
+  filter: invert(34%) sepia(85%) saturate(2815%) hue-rotate(204deg) brightness(101%) contrast(105%) !important;
+}
+
+/* ==========================================================================
+   3. Logo Multipliers
+   ========================================================================== */
+.logo-link {
+  font-size: 1.4rem;      
+  font-weight: 700;
+}
+
+.logo-link .nav-menu-icon {
+  width: 34px;            
+  height: 34px;           
+}
+
+/* ==========================================================================
+   4. Routine State Modifiers & Overrides
+   ========================================================================== */
 .nav-link.status-locked {
-  color: var(--text-muted) !important;
+  color: var(--text-muted);
   opacity: 0.5;
   cursor: not-allowed;
 }
 
 .nav-link.status-locked:hover {
   background-color: transparent;
+  color: var(--text-muted) !important; 
+}
+
+.nav-link.status-locked:hover .nav-menu-icon {
+  filter: none !important; 
 }
 
 .nav-link.status-unlocked {
-  color: var(--color-unlocked) !important;
+  color: var(--text-main); 
   font-weight: 600;
 }
 
+.nav-link.status-unlocked:hover {
+  color: var(--color-unlocked);
+}
+
 .nav-link.status-done {
-  color: var(--color-done) !important;
+  color: var(--color-done);
+}
+
+.nav-link.status-done:hover {
+  color: var(--color-unlocked);
+}
+
+/* ==========================================================================
+   5. Dark Mode Environmental Overrides
+   ========================================================================== */
+body.dark-theme .nav-menu-icon,
+body.dark-theme .nav-icon {
+  filter: brightness(0) invert(1);
+}
+
+body.dark-theme .nav-link.status-locked .nav-menu-icon {
+  filter: brightness(0) invert(1) opacity(0.3) !important;
+}
+
+body.dark-theme .nav-link:not(.status-locked):hover .nav-menu-icon {
+  filter: invert(34%) sepia(85%) saturate(2815%) hue-rotate(204deg) brightness(101%) contrast(105%) !important;
 }

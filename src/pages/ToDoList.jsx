@@ -2,7 +2,9 @@
 
 function ToDoList(){
     return(
-       <div>To Do</div>
+       <div className="page-layout">
+        <h2> to do list </h2>
+        </div>
     );
 }
 

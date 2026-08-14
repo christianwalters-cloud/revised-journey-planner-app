@@ -1,7 +1,10 @@
 
 function NightRoutine(){
     return(
-       <div>Night</div>
+    <div className="page-layout">
+      <h2>Night</h2>
+    </div>
+   
     );
 }
 

@@ -1,0 +1,137 @@
+/* ==========================================================================
+   1. GLOBAL RESET & BASE STYLES
+   ========================================================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-main);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  transition: var(--transition-smooth);
+  min-height: 100vh;             
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ==========================================================================
+   2. GLOBAL ARCHITECTURE & THEME VARIABLES
+   ========================================================================== */
+:root {
+  --bg-primary: #f8f9fa;
+  --bg-card: #ffffff;
+  --text-main: #212529;
+  --text-muted: #6c757d;
+  --border-color: #dee2e6;
+  
+  --color-locked: #6c757d;        
+  --color-unlocked: #007bff;      
+  --color-done: #2ec4b6;
+  --color-danger: #e63946;
+  
+  --radius-standard: 12px;
+  --transition-smooth: background-color 0.25s ease-in-out, 
+                       color 0.25s ease-in-out, 
+                       border-color 0.25s ease-in-out;
+}
+
+body.dark-theme {
+  --bg-primary: #121212;
+  --bg-card: #1e1e1e;
+  --text-main: #f8f9fa;
+  --text-muted: #a0a0a0;
+  --border-color: #333333;
+  --color-locked: #555555;
+  --color-unlocked: #4da3ff;     
+  --color-done: #39e3d4;         
+}
+
+body.light-theme {
+  --bg-primary: #f8f9fa;
+  --bg-card: #ffffff;
+  --text-main: #212529;
+  --text-muted: #6c757d;
+  --border-color: #dee2e6;
+  --color-locked: #6c757d;        
+  --color-unlocked: #007bff;      
+  --color-done: #2ec4b6;
+}
+
+/* ==========================================================================
+   3. BUNDLER ENVIRONMENT LAYOUT OVERRIDES
+   ========================================================================== */
+#root {
+  display: block !important;
+  width: 100% !important;
+  min-height: 100vh;
+}
+
+.app-container {
+  width: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;    
+}
+
+.navbar {
+  width: 100% !important;
+}
+
+.page-content {
+  width: 90% !important;            
+  max-width: 1200px !important;     
+  margin-top: 40px !important;      
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;    
+}
+
+.page-content > div,
+.page-content > main,
+.page-content > section {
+  width: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;    
+  text-align: center !important;     
+}
+
+/* ==========================================================================
+   4. SCREEN READER & ACCESSIBILITY ACCESS OVERRIDES
+   ========================================================================== */
+html.sr-accessible {
+  --transition-smooth: none !important; 
+}
+
+html.sr-accessible .nav-link.status-locked {
+  opacity: 1 !important;
+  text-decoration: line-through !important; 
+}
+
+html.sr-accessible .sr-status-text {
+  font-size: 0.85rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  margin-left: 8px;
+  color: var(--text-muted);
+}
+
+html.sr-accessible .sr-status-text.completed {
+  color: var(--color-done);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

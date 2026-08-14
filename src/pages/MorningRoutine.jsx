@@ -11,6 +11,7 @@ function MorningRoutine({lockStatuses, onRoutineFinish}){
 
 
       return (
+        <div className="page-layout">
         <div className="routine-container morning">
             <h2>☀️ Morning Routine</h2>
              {currentStep === "gratitude" && (
@@ -23,6 +24,7 @@ function MorningRoutine({lockStatuses, onRoutineFinish}){
                 />
             )}
 
+        </div>
         </div>
     );
 }

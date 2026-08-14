@@ -6,7 +6,7 @@ import  Settings  from './pages/Settings'
 import  MorningRoutine  from './pages/MorningRoutine'
 import  ToDoList  from './pages/ToDoList'
 import  NightRoutine  from './pages/NightRoutine'
-import './App.css'
+import './css/App.css'
 import { calculateLockStatuses } from './Utils/LockStatusEngine'
 
 function App() {
@@ -17,6 +17,10 @@ function App() {
 // morning and night routine settings
 const [morningTime, setMorningTime] = useState('09:00');
 const [nightTime, setNightTime] = useState('18:00');
+
+// screen mode acessibility states
+const [darkMode, setDarkMode] = useState(false);
+const [srMode, setSrMode] = useState(false);
 
 // a tracker for current time when app boots up
 const [currentTime, setCurrentTime] = useState(() =>{
@@ -47,7 +51,6 @@ const [nightCompleted, setNightCompleted] = useState(false);
     morningTime,
     nightTime,
     currentTime,
-
     morningCompleted,
     morningVerseCompleted,
     todoCompleted,
@@ -69,12 +72,24 @@ const [nightCompleted, setNightCompleted] = useState(false);
     <Navbar
     lockStatuses={lockStatuses}
     handleNavigationClick={handleNavigationClick}
+    srMode={srMode}
     />
-    
+    <div className="page-content">
     <Routes>
       <Route path='/' element={ <Home lockStatuses={lockStatuses}/>} />
 
-      <Route path='/settings' element={ <Settings/>} />
+      <Route path='/settings' element={ 
+        <Settings
+          darkMode={darkMode}
+          setDarkMode={setDarkMode}
+          srMode={srMode}
+          setSrMode={setSrMode}
+          morningTime={morningTime}
+          setMorningTime={setMorningTime}
+          nightTime={nightTime}
+          setNightTime={setNightTime}
+        />
+      } />
 
       <Route path='/morning-routine' element={ <MorningRoutine lockStatuses={lockStatuses}/> } />
 
@@ -82,7 +97,7 @@ const [nightCompleted, setNightCompleted] = useState(false);
 
       <Route path='/night-routine' element={ <NightRoutine lockStatuses={lockStatuses}/> }/>
     </Routes>
-
+    </div>
     </div>
   );
   }
