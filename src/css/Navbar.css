@@ -124,3 +124,12 @@ body.dark-theme .nav-link.status-locked .nav-menu-icon {
 body.dark-theme .nav-link:not(.status-locked):hover .nav-menu-icon {
   filter: invert(34%) sepia(85%) saturate(2815%) hue-rotate(204deg) brightness(101%) contrast(105%) !important;
 }
+
+/* ==========================================================================
+   6. COMPLETION STATUS BADGE
+   ========================================================================== */
+.done-check {
+  color: var(--color-done);
+  font-weight: 700;
+  margin-left: 4px;
+}

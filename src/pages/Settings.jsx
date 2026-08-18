@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import '../css/Settings.css';
 
 function Settings({
   darkMode,

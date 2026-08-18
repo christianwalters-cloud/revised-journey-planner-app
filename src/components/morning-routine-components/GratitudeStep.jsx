@@ -1,33 +1,90 @@
 import { useState } from "react";
 
-function GratitudeStep({isReadOnly, onNext}){
+export default function GratitudeStep({ isReadOnly, list = [], onAdd, onDelete, onNext }) {
     const [input, setInput] = useState("");
-    return(
+    const MAX_ITEMS = 3;
+    const isLimitReached = list.length >= MAX_ITEMS;
+
+    const canProceed = isReadOnly || isLimitReached;
+
+    const addToGratitudeList = () => {
+        const trimmed = input.trim();
+        if (!trimmed) return alert("Field must contain text before saving.");
+        if (list.length >= MAX_ITEMS) return alert(`Limit of ${MAX_ITEMS} entries reached.`);
+
+        onAdd(trimmed);
+        setInput(""); 
+    };
+
+    const handleKeyDown = (e) => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            addToGratitudeList();
+        }
+    };
+
+    return (
         <div className="reflections-section">
-            <h3>Gratitude Entries</h3>
+            <h3 style={{ textAlign: "center", width: "100%", display: "block" }}>
+                Gratitude Entries ({list.length}/{MAX_ITEMS})
+            </h3>
 
             {!isReadOnly ? (
                 <div className="todo-row">
                     <input
-                    type="text"
-                    value={input}
-                    onChange={(e) => setInput(e.target.value)}
-                    placeholder="I am grateful for..."
+                        type="text"
+                        value={input}
+                        onChange={(e) => setInput(e.target.value)}
+                        onKeyDown={handleKeyDown}
+                        placeholder={isLimitReached ? "Limit of 3 reached" : "I am grateful for..."}
+                        disabled={isLimitReached}
                     />
-                        <button type="button">Add</button>
+                    <button 
+                        type="button" 
+                        onClick={addToGratitudeList}
+                        disabled={isLimitReached}
+                    >
+                        Add
+                    </button>
                 </div>
-
-            ):(
-                <p className="read-only-msg">Veiwing locked answers for today.</p>
+            ) : (
+                <p className="read-only-msg" style={{ textAlign: "center", width: "100%" }}>
+                    Viewing locked answers for today.
+                </p>
             )}
+
             <ul className="todo-list">
-                {/* Render list items. Conditionally hide the delete "X" buttons using !isReadOnly && */}
+                {list.map((item, index) => (
+                    <li key={`${item}-${index}`} className="todo-list-item">
+                        <span className="item-text">{item}</span>
+                        {!isReadOnly && (
+                            <button 
+                                type="button" 
+                                className="delete-btn" 
+                                onClick={() => onDelete(index)}
+                                aria-label={`Delete gratitude item ${index + 1}`}
+                            >
+                                ✕
+                            </button>
+                        )}
+                    </li>
+                ))}
             </ul>
 
-            <button className="next-step-btn" onClick={onNext}>
-                continue →
+            <button 
+                className="next-step-btn" 
+                type="button" 
+                onClick={onNext}
+                disabled={!canProceed} 
+                style={{ 
+                    opacity: canProceed ? 1 : 0.5, 
+                    cursor: canProceed ? "pointer" : "not-allowed",
+                    display: "block",
+                    margin: "1.5rem auto 0 auto" 
+                }}
+            >
+                Continue to verses →
             </button>
         </div>
     );
 }
-export default GratitudeStep;

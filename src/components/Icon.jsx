@@ -3,17 +3,19 @@ import MorningRoutineSvg from '../assets/sun-solid-full.svg'
 import ToDoListSvg from '../assets/list-check-solid-full.svg'
 import NightTimeRoutineSvg from '../assets/moon-solid-full.svg'
 import SettingsSvg from '../assets/gear-solid-full.svg' 
+import WhySvg from '../assets/brain-solid-full.svg'
 
 const ICON_REGISTRY = {
   homeImage: HomeSvg,
   morningImage: MorningRoutineSvg,
   todoImage: ToDoListSvg,
   nightImage: NightTimeRoutineSvg, 
-  settingsImage: SettingsSvg 
+  settingsImage: SettingsSvg,
+  whyImage: WhySvg
 };
 
 export function Icon({name, className='', ...props}) {
-  const iconSrc = ICON_REGISTRY[name]; // 💡 Changed variable name for clarity
+  const iconSrc = ICON_REGISTRY[name]; 
 
   if (!iconSrc) {
     console.warn(`Icon "${name}" does not exist in your assets registry.`);
@@ -22,8 +24,8 @@ export function Icon({name, className='', ...props}) {
 
   return (
     <img 
-      src={iconSrc}                      // ✅ Render as a standard image source
-      alt={`${name} icon`}               // ✅ Added for accessibility
+      src={iconSrc}                      
+      alt={`${name} icon`}               
       className={`nav-icon ${className}`} 
       {...props} 
     />

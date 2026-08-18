@@ -1,0 +1,153 @@
+/* ==========================================================================
+   1. STRUCTURAL HEADERS & SUB-TEXT ALIGNMENTS
+   ========================================================================== */
+.todo-centered-header {
+  text-align: center;
+  width: 100%;
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 0.5rem;
+}
+
+.todo-read-only-notice {
+  text-align: center;
+  width: 100%;
+  color: var(--color-locked);
+  font-style: italic;
+  font-size: 0.95rem;
+  margin-bottom: 1rem;
+}
+
+.counter-display {
+  text-align: center;
+  width: 100%;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-top: -0.5rem;
+  margin-bottom: 1rem;
+}
+
+/* ==========================================================================
+   2. INTERACTIVE BUTTON LAYOUT OVERRIDES
+   ========================================================================== */
+.todo-row button#removeTasksBtn {
+  background-color: var(--color-danger);
+  color: #ffffff;
+}
+
+.todo-row button#removeTasksBtn:hover {
+  filter: brightness(0.9);
+}
+
+/* ==========================================================================
+   3. BOARD DUAL-COLUMN TASK SUB-SECTIONS
+   ========================================================================== */
+.task-sub-section {
+  width: 100%;
+  text-align: left;
+  margin-top: 1.5rem;
+}
+
+.task-section-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.05rem;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+}
+
+.task-section-title.pending {
+  color: var(--text-muted);
+}
+
+.task-section-title.completed {
+  color: var(--color-done);
+}
+
+.task-clickable-area {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.task-checkbox-indicator {
+  width: 16px;
+  height: 16px;
+  transform: scale(1.15);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* ==========================================================================
+   4. SEPARATE SUB-LIST INTERACTION BEHAVIOURS
+   ========================================================================== */
+.todo-list-item.active-item {
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+
+.todo-list-item.active-item:hover {
+  border-color: var(--color-unlocked);
+}
+
+.todo-list-item.completed-item {
+  opacity: 0.55;
+  background-color: rgba(46, 196, 182, 0.04);
+  border-color: var(--border-color);
+}
+
+.todo-list-item.completed-item .item-text {
+  text-decoration: line-through;
+  color: var(--text-muted);
+}
+
+.todo-empty-fallback {
+  color: var(--text-muted);
+  font-style: italic;
+  margin: 2.5rem 0;
+  text-align: center;
+  width: 100%;
+  font-size: 1rem;
+}
+
+/* ==========================================================================
+   5. UNLOCK BANNER FOOTER CONTROLS
+   ========================================================================== */
+.todo-unlock-msg-wrapper {
+  margin-top: 2rem; 
+  padding-top: 1.5rem; 
+  border-top: 1px dashed var(--border-color);
+  text-align: center;
+  width: 100%;
+}
+
+.todo-success-banner-text {
+  color: var(--color-done); 
+  font-weight: bold; 
+  margin: 0 0 1rem 0;
+  font-size: 1.05rem;
+}
+
+.next-step-btn.todo-finalize-nav-btn {
+  display: block;
+  text-decoration: none;
+  text-align: center;
+  background-color: var(--color-done); 
+  color: white; 
+  width: 100%; 
+  font-size: 1rem;
+  padding: 0.85rem;
+  border-radius: 8px;
+  font-weight: bold;
+  transition: var(--transition-smooth);
+}
+
+.next-step-btn.todo-finalize-nav-btn:hover {
+  filter: brightness(1.1);
+}
+.starred-main-task {
+    border-left: 4px solid #ffd700; /* Adds a nice gold accent line on the left side */
+    font-weight: bold;             /* Makes the text pop */
+}

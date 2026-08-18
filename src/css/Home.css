@@ -1,0 +1,103 @@
+/* ==========================================================================
+   1. DASHBOARD LAYOUT & GRID
+   ========================================================================== */
+.home-dashboard {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.page-title {
+  font-size: 2.25rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  color: var(--text-main);
+  text-align: center;
+}
+
+.dashboard-grid {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: stretch;
+    gap: 20px;
+    width: 100%;
+}
+
+/* ==========================================================================
+   2. INTERACTIVE ROUTINE CARDS (Default Dark Canvas)
+   ========================================================================== */
+.routine-card {
+    flex: 1;
+  background-color: #1a1a1a;
+  border: 0.0625rem solid #333333;
+  border-radius: var(--radius-standard);
+  padding: 2.5rem 2rem;
+  gap: 1.25rem;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.routine-card h2 {
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.routine-card-icon {
+  width: 54px !important;
+  height: 54px !important;
+  filter: brightness(0) invert(1);
+  transition: filter 0.25s ease-in-out;
+}
+
+.card-status-indicator {
+  font-size: 1.75rem;
+  margin-top: 0.5rem;
+}
+
+/* ==========================================================================
+   3. CARD INTERACTION STATES & STATUS BADGES
+   ========================================================================== */
+.routine-card.status-locked {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.routine-card:not(.status-locked):hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+  background-color: #ffffff;
+}
+
+.routine-card:not(.status-locked):hover h2 {
+  color: var(--color-unlocked);
+}
+
+.routine-card:not(.status-locked):hover .routine-card-icon {
+  filter: invert(34%) sepia(85%) saturate(2815%) hue-rotate(204deg) brightness(101%) contrast(105%) !important;
+}
+
+.routine-card.status-unlocked {
+  border-color: var(--color-unlocked);
+}
+
+.routine-card.status-done {
+  border-color: var(--color-done);
+}
+
+.status-badge.locked { color: #888888; }
+.status-badge.unlocked { color: var(--color-unlocked); }
+.status-badge.complete { color: var(--color-done); font-weight: bold; }
+
+/* ==========================================================================
+   4. SYSTEM THEME FALLBACK CONTROLS
+   ========================================================================== */
+body.dark-theme .routine-card {
+  background-color: #0a0a0a;
+  border-color: #222222;
+}
+
+body.dark-theme .routine-card:not(.status-locked):hover {
+  background-color: var(--bg-card);
+}

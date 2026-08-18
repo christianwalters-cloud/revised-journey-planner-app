@@ -1,0 +1,144 @@
+/* ==========================================================================
+   1. LAYOUT STRUCTURAL WRAPPERS
+   ========================================================================== */
+.goals-container {
+  width: 100%;
+  max-width: 650px;
+  margin: 0 auto;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.page-subtitle {
+  color: #888888;
+  font-size: 1rem;
+  margin-top: -1.5rem;
+  margin-bottom: 2.5rem;
+  text-align: center;
+  line-height: 1.5;
+}
+
+/* ==========================================================================
+   2. DISPLAY BOARD CARDS (Matching Settings Cards)
+   ========================================================================== */
+.display-card-wrapper, 
+.goal-mutation-form {
+  background-color: #1a1a1a;
+  border: 0.0625rem solid #333333;
+  border-radius: var(--radius-standard, 12px);
+  padding: 2.5rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  box-sizing: border-box;
+}
+
+.goal-display-box {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  border-left: 3px solid #444444;
+  padding-left: 15px;
+}
+
+.badge-tag {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  align-self: flex-start;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.goal-tag { color: var(--color-unlocked, #007acc); background: rgba(0, 122, 204, 0.1); }
+.why-tag { color: var(--color-done, #4caf50); background: rgba(76, 175, 80, 0.1); }
+
+.display-main-text {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0;
+}
+
+.display-sub-text {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: #cccccc;
+  margin: 0;
+  font-style: italic;
+}
+
+/* ==========================================================================
+   3. ACCESSIBLE CAPTURE INPUT FIELDS (White Canvas / Black Border)
+   ========================================================================== */
+.form-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.form-label-text {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #ffffff;
+}
+
+.goal-text-input,
+.goal-textarea-input {
+  width: 100%;
+  background-color: #ffffff;   /* Pure white interior canvas */
+  color: #000000;              /* Solid dark readable value output text */
+  border: 2px solid #000000;   /* Thick solid sharp black framing boundaries */
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-size: 1.05rem;
+  font-family: inherit;
+  box-sizing: border-box;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.goal-textarea-input {
+  resize: vertical;            /* Allow structural height adjustment but stop horizontal layout breaking */
+  line-height: 1.5;
+}
+
+.goal-text-input:focus,
+.goal-textarea-input:focus {
+  border-color: var(--color-unlocked, #007acc);
+  box-shadow: 0 0 0 3px rgba(0, 122, 204, 0.2);
+}
+
+/* ==========================================================================
+   4. BUTTON MOTOR CONTROL SYSTEM
+   ========================================================================== */
+.button-group-row {
+  display: flex;
+  flex-direction: row;
+  gap: 15px;
+  
+  /* 🚀 FIX: Change from flex-start to center to align the buttons horizontally */
+  justify-content: center; 
+  
+  width: 100%;                  /* Ensures flexbox container spans the full card canvas width */
+  margin-top: 0.5rem;
+  box-sizing: border-box;
+}
+
+.btn {
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  border: none;
+  transition: transform 0.1s ease, filter 0.2s ease;
+}
+
+.btn:active { transform: scale(0.97); }
+.btn-edit { background-color: #333333; color: white; border: 1px solid #444444; }
+.btn-delete { background-color: #b71c1c; color: white; }
+.btn-save { background-color: #2e7d32; color: white; }
+.btn-cancel { background-color: transparent; color: #888888; border: 1px solid #444444; }
+
+.btn:hover { filter: brightness(1.2); }
