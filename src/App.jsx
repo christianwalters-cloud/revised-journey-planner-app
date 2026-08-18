@@ -21,13 +21,11 @@ function App() {
   const [darkMode, setDarkMode] = useState(() => localStorage.getItem('routine_dark_mode') === 'true');
   const [srMode, setSrMode] = useState(() => localStorage.getItem('routine_sr_mode') === 'true');
 
-  // Core Completion Statuses (Controls the Lock Status Engine)
   const [morningGratitudeCompleted, setMorningGratitudeCompleted] = useState(() => localStorage.getItem('routine_morning_gratitude') === 'true'); 
   const [morningVerseCompleted, setMorningVerseCompleted] = useState(() => localStorage.getItem('routine_morning_verse') === 'true');
   const [todoCompleted, setTodoCompleted] = useState(() => localStorage.getItem('routine_todo_completed') === 'true');
   const [nightCompleted, setNightCompleted] = useState(() => localStorage.getItem('routine_night_completed') === 'true');
 
-  // Central Tracking States for Children Components
   const [selectedVerseId, setSelectedVerseId] = useState(() => localStorage.getItem('routine_selected_verse_id') || '');
   const [todos, setTodos] = useState(() => JSON.parse(localStorage.getItem('routine_todos')) || []);
 
@@ -36,7 +34,6 @@ function App() {
     return { hour: now.getHours(), minute: now.getMinutes() };
   });
 
-  // 💾 Global LocalStorage Synchronization Side-Effect
   useEffect(() => {
     localStorage.setItem('routine_day_id', dayIdentifier);
     localStorage.setItem('routine_morning_time', morningTime);
@@ -51,14 +48,13 @@ function App() {
     localStorage.setItem('routine_todos', JSON.stringify(todos));
   }, [dayIdentifier, morningTime, nightTime, darkMode, srMode, morningGratitudeCompleted, morningVerseCompleted, todoCompleted, nightCompleted, selectedVerseId, todos]);
 
-  // 🕒 60-Second Midnight Reset Timer
-  useEffect(() => {
+    useEffect(() => {
     const timer = setInterval(() => {
       const now = new Date();
       setCurrentTime({ hour: now.getHours(), minute: now.getMinutes() });
 
       const todayStr = now.toLocaleDateString();
-      if (todayStr !== dayIdentifier) {
+      if (todayStr !== localStorage.getItem('routine_day_id')) {
         setDayIdentifier(todayStr);
         setMorningGratitudeCompleted(false);
         setMorningVerseCompleted(false);
@@ -68,10 +64,11 @@ function App() {
         setTodos([]);
       }
     }, 60000); 
-    return () => clearInterval(timer);
-  }, [dayIdentifier]);
 
-  // ⚙️ Pure Lock Engine Calculation Wrapper
+    return () => clearInterval(timer);
+  }, []); // 🚀 FIXED: Empty array ensures the interval initializes only once
+
+
   const lockStatuses = useMemo(() => {
     return calculateLockStatuses({
       morningTime,
@@ -97,7 +94,8 @@ function App() {
   
   return (
     <div className={`app-container ${darkMode ? 'dark-mode' : 'light-mode'}`} key={dayIdentifier}>
-      <Navbar lockStatuses={lockStatuses} handleNavigationClick={handleNavigationClick} />
+      <Navbar lockStatuses={lockStatuses} handleNavigationClick={handleNavigationClick} srMode={srMode} />
+
       
       <div className="page-content">
         <Routes>
@@ -110,7 +108,6 @@ function App() {
             />
           } />
 
-          {/* ☀️ MORNING ROUTE INPUTS */}
           <Route path='/morning-routine' element={ 
             <MorningRoutine 
               lockStatuses={lockStatuses} 
@@ -121,22 +118,17 @@ function App() {
             /> 
           } />
 
-          {/* 📝 TO DO LIST INPUTS */}
           <Route path='/todo' element={ 
             <ToDoList 
-              todos={todos}
-              setTodos={setTodos}
               isReadOnly={lockStatuses?.todo === "done" || lockStatuses?.todo === "locked"} 
               onTodoRoutineFinish={() => setTodoCompleted(true)}
             /> 
           } />
 
-          {/* 🌙 NIGHT ROUTE INPUTS */}
           <Route path='/night-routine' element={ 
             <NightRoutine 
-              activeVerseData={activeVerseData}
-              isReadOnly={lockStatuses?.night === "done" || lockStatuses?.night === "locked"}
-              onNightRoutineFinish={() => setNightCompleted(true)}
+              lockStatuses={lockStatuses}
+              onNightFinish={() => setNightCompleted(true)}
             /> 
           } />
         </Routes>

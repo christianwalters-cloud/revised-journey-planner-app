@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import '../css/Settings.css';
 
 function Settings({
@@ -11,8 +11,8 @@ function Settings({
   nightTime,
   setNightTime
 }) {
-  
-  // 💡 Dark Mode DOM Handler
+  const [isConfirming, setIsConfirming] = useState(false);
+
   useEffect(() => {
     if (darkMode) {
       document.body.classList.add("dark-theme");
@@ -23,7 +23,6 @@ function Settings({
     }
   }, [darkMode]);
 
-  // 💡 Screen Reader Mode DOM Handler
   useEffect(() => {
     if (srMode) {
       document.documentElement.classList.add('sr-accessible');
@@ -32,11 +31,19 @@ function Settings({
     }
   }, [srMode]);
 
+  const handleMasterReset = () => {
+    if (!isConfirming) {
+      setIsConfirming(true);
+      return;
+    }
+    localStorage.clear();
+    window.location.reload();
+  };
+
   return (
     <div className="settings-container">
       <ul className="settings-list">
         
-        {/* 1. Display Mode Toggle Row */}
         <li className="setting-item toggle-feature">
           <div className="setting-text">
             <h2>Display mode</h2>
@@ -56,7 +63,6 @@ function Settings({
           </label>
         </li> 
 
-        {/* 2. Screen Reader Layout Toggle Row */}
         <li className="setting-item toggle-feature">
           <div className="setting-text">
             <h2>Screen Reader Layout</h2>
@@ -76,7 +82,6 @@ function Settings({
           </label>
         </li>
 
-        {/* 3. Morning Routine Row */}
         <li className="setting-item toggle-feature">
           <div className="setting-text">
             <h2>Morning Routine start time</h2>
@@ -92,7 +97,6 @@ function Settings({
           />
         </li>
 
-        {/* 4. Night Routine Row */}
         <li className="setting-item time-feature">
           <div className="setting-text">
             <h2>Night Routine start time</h2>
@@ -108,10 +112,38 @@ function Settings({
           />
         </li>
 
+        <li className="setting-item danger-zone-feature" style={{ flexDirection: "column", gap: "12px", alignItems: "flex-start" }}>
+          <div className="setting-text">
+            <h2>Danger Zone</h2>
+            <p>Permanently erase all progress, goals, and routine history data</p>
+          </div>
+          
+          <button
+            type="button"
+            className="master-clear-btn"
+            onClick={handleMasterReset}
+            onMouseLeave={() => setIsConfirming(false)}
+            style={{
+              backgroundColor: isConfirming ? "var(--color-danger, #e63946)" : "var(--text-main, #212529)",
+              color: "var(--bg-card, #ffffff)",
+              border: "none",
+              padding: "12px 24px",
+              borderRadius: "8px",
+              fontSize: "1rem",
+              fontWeight: "600",
+              cursor: "pointer",
+              transition: "background-color 0.2s ease, transform 0.1s ease",
+              width: "100%",
+              marginTop: "8px"
+            }}
+          >
+            {isConfirming ? "Are you sure? Click again to confirm" : "Reset Daily Progress & Cache"}
+          </button>
+        </li>
+
       </ul>
     </div>
   );
 }
 
 export default Settings;
-

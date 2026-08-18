@@ -32,15 +32,12 @@
     transition: var(--transition-smooth);
 }
 
-/* 🚀 FIX: Added the missing dot (.) and scaled the checkbox elements */
 .settings-checkbox {
-    width: 14px;                 /* Sets explicit fallback width box */
-    height: 14px;                /* Sets explicit fallback height box */
-    transform: scale(1.5);       /* 🚀 Scales the tick box up cleanly and uniformly */
-    cursor: pointer;             /* Changes cursor to hand indicator on hover */
-    margin: 10px;                /* Creates clean separation around the input */
-    
-    /* Ensures alignment engine lines up nicely with toggle text labels */
+    width: 14px;                 
+    height: 14px;                
+    transform: scale(1.5);       
+    cursor: pointer;             
+    margin: 10px;                
     align-self: center;          
 }
 
@@ -66,4 +63,12 @@
 
 .settings-time-input::-webkit-calendar-picker-indicator {
     filter: invert(0);           
+}
+
+/* ==========================================================================
+   3. DANGER ZONE CENTERED ELEMENT
+   ========================================================================== */
+.danger-zone-feature {
+    align-items: center !important;
+    text-align: center !important;
 }

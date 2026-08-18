@@ -1,10 +1,11 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Icon } from "./Icon"; 
 import "../css/Navbar.css";
 
-function Navbar({ lockStatuses, handleNavigationClick }) {
+function Navbar({ lockStatuses, handleNavigationClick, srMode = false }) {
+  const [isOpen, setIsOpen] = useState(false);
   
-  // Unified navigation configuration map linked to your SVG registry names
   const navItems = [
     { key: "morning", path: "/morning-routine", label: "Morning Routine", iconName: "morningImage" },
     { key: "todo", path: "/todo", label: "To Do List", iconName: "todoImage" },
@@ -13,21 +14,33 @@ function Navbar({ lockStatuses, handleNavigationClick }) {
 
   const handleRoutineClick = (e, status) => {
     handleNavigationClick(e, status);
+    if (status !== 'locked') {
+      setIsOpen(false);
+    }
   };
 
   return (
     <nav className="navbar" aria-label="Main Navigation">
-      {/* 🚀 Journey Logo acting as the sole primary home navigation link block */}
       <div className="navbar-logo">
-        <Link to="/" className="nav-link logo-link">
+        <Link to="/" className="nav-link logo-link" onClick={() => setIsOpen(false)}>
           <Icon name="homeImage" className="nav-menu-icon" aria-hidden="true" />
           <span>Journey</span>
         </Link>
       </div>
+
+      <button 
+        type="button" 
+        className={`navbar-toggle-btn ${isOpen ? "open" : ""}`}
+        onClick={() => setIsOpen(!isOpen)}
+        aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
+        aria-expanded={isOpen}
+      >
+        <span className="hamburger-line"></span>
+        <span className="hamburger-line"></span>
+        <span className="hamburger-line"></span>
+      </button>
       
-      {/* Semantic horizontal routing menu structure */}
-      <ul className="navbar-menu">
-        
+      <ul className={`navbar-menu ${isOpen ? "mobile-open" : ""}`}>
         {navItems.map(({ key, path, label, iconName }) => {
           const status = lockStatuses?.[key] || "locked";
           const isDone = status === "done";
@@ -42,22 +55,27 @@ function Navbar({ lockStatuses, handleNavigationClick }) {
               >
                 <Icon name={iconName} className="nav-menu-icon" aria-hidden="true" />
                 <span>{label}</span>
-                {isDone && <span className="done-check" aria-hidden="true">✓</span>}
+                {isDone && (
+                  srMode ? (
+                    <span className="sr-status-text completed" style={{ marginLeft: "6px" }}>(Completed)</span>
+                  ) : (
+                    <span className="done-check" aria-hidden="true">✓</span>
+                  )
+                )}
               </Link>
             </li>
           );
         })}
 
-        {/* 🚀 ADDED: The Why component module placed right before settings using the brain icon */}
         <li>
-          <Link to="/why" className="nav-link">
+          <Link to="/why" className="nav-link" onClick={() => setIsOpen(false)}>
             <Icon name="whyImage" className="nav-menu-icon" aria-hidden="true" />
             <span>Why</span>
           </Link>
         </li>
         
         <li>
-          <Link to="/settings" className="nav-link">
+          <Link to="/settings" className="nav-link" onClick={() => setIsOpen(false)}>
             <Icon name="settingsImage" className="nav-menu-icon" aria-hidden="true" />
             <span>Settings</span>
           </Link>

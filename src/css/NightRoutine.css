@@ -1,0 +1,216 @@
+/* ==========================================================================
+   1. STRUCTURE & CONTAINERS (Bypasses App.css Overrides)
+   ========================================================================== */
+main.page-layout-wrapper {
+  width: 100%;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: flex-start !important;
+  padding: 40px 20px;
+  box-sizing: border-box;
+}
+
+section.routine-container.night {
+  width: 100%;
+  max-width: 650px;
+  margin: 0 auto;
+  background-color: var(--bg-card); 
+  border: 0.0625rem solid var(--border-color); 
+  border-radius: var(--radius-standard);
+  padding: 2.5rem 2rem;
+  box-sizing: border-box;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 1.5rem;
+  transition: var(--transition-smooth);
+}
+
+.routine-container.night h2 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 0.5rem;
+}
+
+/* ==========================================================================
+   2. SPLIT STEP HEADERS & HINTS
+   ========================================================================== */
+.reflections-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  width: 100%;
+}
+
+.reflections-section h3 {
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: var(--text-main);
+  text-align: left;
+}
+
+.step-hint {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  text-align: left;
+  margin-top: -0.5rem;
+}
+
+.read-only-msg {
+  color: var(--color-locked);
+  font-style: italic;
+  font-size: 0.95rem;
+  text-align: left;
+}
+
+/* ==========================================================================
+   3. INPUT FIELDS & SYSTEM ROW (Matches Time Input Styling)
+   ========================================================================== */
+.todo-row {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  width: 100%;
+}
+
+.todo-row input[type="text"] {
+  flex: 1;
+  background-color: #ffffff !important;   
+  color: #000000 !important;              
+  border: 2px solid #000000 !important;   
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-size: 1.05rem;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.todo-row input[type="text"]:focus {
+  border-color: var(--color-unlocked) !important;
+}
+
+.todo-row input[type="text"]:disabled {
+  background-color: var(--bg-primary) !important;
+  color: var(--text-muted) !important;
+  border-color: var(--border-color) !important;
+  cursor: not-allowed;
+}
+
+/* ==========================================================================
+   4. DYNAMIC SUB-ITEMS LISTS (No Bullet Dots)
+   ========================================================================== */
+ul.todo-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  list-style: none !important;
+  list-style-type: none !important;
+  padding: 0;
+  margin: 0;
+}
+
+ul.todo-list li.todo-list-item,
+ul.todo-list li {
+  list-style: none !important;
+  list-style-type: none !important;
+  background-color: var(--bg-primary); 
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  text-align: left;
+  box-sizing: border-box;
+}
+
+.item-text {
+  color: var(--text-main);
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
+/* ==========================================================================
+   5. INTERACTIVE ACTIONS BUTTONS & MOTOR SYSTEM
+   ========================================================================== */
+.todo-row button[type="button"],
+.back-btn,
+.next-step-btn,
+.complete-btn {
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  border: none;
+  transition: transform 0.1s ease, filter 0.2s ease;
+}
+
+.todo-row button[type="button"]:active,
+.next-step-btn:active,
+.complete-btn:active {
+  transform: scale(0.97);
+}
+
+.todo-row button[type="button"] {
+  background-color: var(--text-main);
+  color: var(--bg-card);
+}
+
+.back-btn {
+  align-self: flex-start;
+  background-color: transparent;
+  color: var(--text-muted);
+  border: 1px solid var(--border-color);
+  padding: 6px 14px;
+}
+
+.back-btn:hover {
+  background-color: var(--bg-primary);
+  color: var(--text-main);
+}
+
+.next-step-btn {
+  background-color: var(--color-unlocked);
+  color: #ffffff;
+  align-self: center;
+  margin-top: 1rem;
+}
+
+.center-btn-wrapper {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 1.5rem;
+}
+
+.complete-btn {
+  background-color: var(--color-done);
+  color: #ffffff;
+  padding: 12px 28px;
+}
+
+.delete-btn {
+  background: transparent;
+  border: none;
+  color: var(--color-danger, #e63946);
+  font-size: 1.25rem;
+  font-weight: bold;
+  cursor: pointer;
+  line-height: 1;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.delete-btn:hover {
+  background-color: rgba(230, 57, 70, 0.1);
+}
+
+.todo-row button[type="button"]:hover,
+.next-step-btn:hover,
+.complete-btn:hover {
+  filter: brightness(1.1);
+}
