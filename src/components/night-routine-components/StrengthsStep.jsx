@@ -2,6 +2,7 @@ import { useState } from "react";
 
 function StrengthsStep({ isReadOnly, list = [], onAdd, onDelete, onNext }) {
     const [input, setInput] = useState("");
+    const [errorMsg, setErrorMsg] = useState(""); // Replaced alert windows with local error states
     const MAX_ITEMS = 3;
     const isLimitReached = list.length >= MAX_ITEMS;
 
@@ -9,8 +10,16 @@ function StrengthsStep({ isReadOnly, list = [], onAdd, onDelete, onNext }) {
 
     const addToStrengthsList = () => {
         const trimmed = input.trim();
-        if (!trimmed) return alert("Field must contain text before saving.");
-        if (list.length >= MAX_ITEMS) return alert(`Limit of ${MAX_ITEMS} entries reached.`);
+        setErrorMsg(""); // Clear out stale states
+
+        if (!trimmed) {
+            setErrorMsg("Field must contain text before saving.");
+            return;
+        }
+        if (list.length >= MAX_ITEMS) {
+            setErrorMsg(`Limit of ${MAX_ITEMS} entries reached.`);
+            return;
+        }
 
         onAdd(trimmed);
         setInput(""); 
@@ -26,15 +35,31 @@ function StrengthsStep({ isReadOnly, list = [], onAdd, onDelete, onNext }) {
     return (
         <div className="reflections-section">
             <h3 style={{ textAlign: "center", width: "100%", display: "block" }}>
-                What went well today ({list.length}/{MAX_ITEMS})
+                What went well today <span aria-hidden="true">({list.length}/{MAX_ITEMS})</span>
+                <span className="sr-only">, {list.length} of {MAX_ITEMS} items logged</span>
             </h3>
+
+            {/* Accessible Live Region for inline errors */}
+            {errorMsg && (
+                <p role="alert" className="error-message" style={{ color: "red", textAlign: "center", margin: "10px 0" }}>
+                    {errorMsg}
+                </p>
+            )}
 
             {!isReadOnly ? (
                 <div className="todo-row">
+                    {/* Hidden semantic label linked directly to input fields */}
+                    <label htmlFor="strengths-input-entry" className="sr-only">
+                        Type something that went well today
+                    </label>
                     <input
                         type="text"
+                        id="strengths-input-entry"
                         value={input}
-                        onChange={(e) => setInput(e.target.value)}
+                        onChange={(e) => {
+                            setInput(e.target.value);
+                            if (errorMsg) setErrorMsg("");
+                        }}
                         onKeyDown={handleKeyDown}
                         placeholder={isLimitReached ? "Limit of 3 reached" : "Something that went well..."}
                         disabled={isLimitReached}
@@ -83,7 +108,7 @@ function StrengthsStep({ isReadOnly, list = [], onAdd, onDelete, onNext }) {
                     margin: "1.5rem auto 0 auto" 
                 }}
             >
-                Continue to what didn't go well →
+                Continue to what didn't go well <span aria-hidden="true">→</span>
             </button>
         </div>
     );

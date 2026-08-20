@@ -14,8 +14,8 @@ section.routine-container.night {
   width: 100%;
   max-width: 650px;
   margin: 0 auto;
-  background-color: var(--bg-card); 
-  border: 0.0625rem solid var(--border-color); 
+  background-color: var(--bg-card); /* 🎨 Inherits theme card background */
+  border: 0.0625rem solid var(--border-color); /* 🎨 Inherits theme card borders */
   border-radius: var(--radius-standard);
   padding: 2.5rem 2rem;
   box-sizing: border-box;
@@ -25,11 +25,12 @@ section.routine-container.night {
   transition: var(--transition-smooth);
 }
 
-.routine-container.night h2 {
+section.routine-container.night h1 {
   font-size: 1.75rem;
   font-weight: 700;
   color: var(--text-main);
   margin-bottom: 0.5rem;
+  text-align: left;
 }
 
 /* ==========================================================================
@@ -49,13 +50,6 @@ section.routine-container.night {
   text-align: left;
 }
 
-.step-hint {
-  font-size: 0.95rem;
-  color: var(--text-muted);
-  text-align: left;
-  margin-top: -0.5rem;
-}
-
 .read-only-msg {
   color: var(--color-locked);
   font-style: italic;
@@ -63,8 +57,13 @@ section.routine-container.night {
   text-align: left;
 }
 
+.error-message {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
 /* ==========================================================================
-   3. INPUT FIELDS & SYSTEM ROW (Matches Time Input Styling)
+   3. INPUT FIELDS & SYSTEM ROW (High Contrast Styling)
    ========================================================================== */
 .todo-row {
   display: flex;
@@ -75,9 +74,9 @@ section.routine-container.night {
 
 .todo-row input[type="text"] {
   flex: 1;
-  background-color: #ffffff !important;   
-  color: #000000 !important;              
-  border: 2px solid #000000 !important;   
+  background-color: #ffffff !important;   /* Pure white interior canvas */
+  color: #000000 !important;              /* Solid dark readable value output text */
+  border: 2px solid #000000 !important;   /* Thick solid sharp black framing boundaries */
   border-radius: 8px;
   padding: 10px 16px;
   font-size: 1.05rem;
@@ -105,15 +104,12 @@ ul.todo-list {
   gap: 10px;
   width: 100%;
   list-style: none !important;
-  list-style-type: none !important;
   padding: 0;
   margin: 0;
 }
 
-ul.todo-list li.todo-list-item,
 ul.todo-list li {
   list-style: none !important;
-  list-style-type: none !important;
   background-color: var(--bg-primary); 
   border: 1px solid var(--border-color);
   border-radius: 8px;
@@ -138,8 +134,7 @@ ul.todo-list li {
    ========================================================================== */
 .todo-row button[type="button"],
 .back-btn,
-.next-step-btn,
-.complete-btn {
+.next-step-btn {
   padding: 10px 20px;
   font-size: 1rem;
   font-weight: 600;
@@ -150,9 +145,17 @@ ul.todo-list li {
 }
 
 .todo-row button[type="button"]:active,
-.next-step-btn:active,
-.complete-btn:active {
+.next-step-btn:active {
   transform: scale(0.97);
+}
+
+/* Keyboard tracking support indicators */
+.todo-row button[type="button"]:focus-visible,
+.back-btn:focus-visible,
+.next-step-btn:focus-visible,
+.delete-btn:focus-visible {
+  outline: 3px solid var(--color-unlocked) !important;
+  outline-offset: 2px !important;
 }
 
 .todo-row button[type="button"] {
@@ -180,17 +183,10 @@ ul.todo-list li {
   margin-top: 1rem;
 }
 
-.center-btn-wrapper {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  margin-top: 1.5rem;
-}
-
-.complete-btn {
-  background-color: var(--color-done);
-  color: #ffffff;
-  padding: 12px 28px;
+.next-step-btn:disabled {
+  opacity: 0.5 !important;
+  cursor: not-allowed !important;
+  transform: none !important;
 }
 
 .delete-btn {
@@ -210,7 +206,6 @@ ul.todo-list li {
 }
 
 .todo-row button[type="button"]:hover,
-.next-step-btn:hover,
-.complete-btn:hover {
+.next-step-btn:hover {
   filter: brightness(1.1);
 }

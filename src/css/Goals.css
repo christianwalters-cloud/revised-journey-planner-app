@@ -9,10 +9,16 @@
   box-sizing: border-box;
 }
 
+/* Ensure the main page heading text shifts correctly with global themes */
+.goals-container .page-title {
+  color: var(--text-main);
+  text-align: center;
+}
+
 .page-subtitle {
-  color: #888888;
+  color: var(--text-muted, #888888);
   font-size: 1rem;
-  margin-top: -1.5rem;
+  margin-top: 1rem;
   margin-bottom: 2.5rem;
   text-align: center;
   line-height: 1.5;
@@ -23,8 +29,8 @@
    ========================================================================== */
 .display-card-wrapper, 
 .goal-mutation-form {
-  background-color: #1a1a1a;
-  border: 0.0625rem solid #333333;
+  background-color: var(--bg-card); /* Dynamically shifts cards between dark charcoal and pure white */
+  border: 0.0625rem solid var(--border-color);
   border-radius: var(--radius-standard, 12px);
   padding: 2.5rem 2rem;
   display: flex;
@@ -37,7 +43,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
-  border-left: 3px solid #444444;
+  border-left: 3px solid var(--border-color);
   padding-left: 15px;
 }
 
@@ -56,14 +62,15 @@
 .display-main-text {
   font-size: 1.4rem;
   font-weight: 600;
-  color: #ffffff;
+  color: var(--text-main); /* Text adapts smoothly between light and dark modes */
   margin: 0;
 }
 
 .display-sub-text {
   font-size: 1.1rem;
   line-height: 1.6;
-  color: #cccccc;
+  color: var(--text-main);
+  opacity: 0.85;
   margin: 0;
   font-style: italic;
 }
@@ -80,13 +87,13 @@
 .form-label-text {
   font-size: 1.1rem;
   font-weight: 500;
-  color: #ffffff;
+  color: var(--text-main);
 }
 
 .goal-text-input,
 .goal-textarea-input {
   width: 100%;
-  background-color: #ffffff;   /* Pure white interior canvas */
+  background-color: #ffffff;   /* Pure white interior canvas for ultimate readability */
   color: #000000;              /* Solid dark readable value output text */
   border: 2px solid #000000;   /* Thick solid sharp black framing boundaries */
   border-radius: 8px;
@@ -109,6 +116,14 @@
   box-shadow: 0 0 0 3px rgba(0, 122, 204, 0.2);
 }
 
+/* Dynamic text-zoom counter indicator alignment */
+.character-counter {
+  text-align: right;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-top: -4px;
+}
+
 /* ==========================================================================
    4. BUTTON MOTOR CONTROL SYSTEM
    ========================================================================== */
@@ -116,11 +131,8 @@
   display: flex;
   flex-direction: row;
   gap: 15px;
-  
-  /* 🚀 FIX: Change from flex-start to center to align the buttons horizontally */
-  justify-content: center; 
-  
-  width: 100%;                  /* Ensures flexbox container spans the full card canvas width */
+  justify-content: center; /* Beautiful horizontal layout button alignment */
+  width: 100%;             /* Ensures flexbox container spans the full card canvas width */
   margin-top: 0.5rem;
   box-sizing: border-box;
 }
@@ -136,9 +148,11 @@
 }
 
 .btn:active { transform: scale(0.97); }
-.btn-edit { background-color: #333333; color: white; border: 1px solid #444444; }
-.btn-delete { background-color: #b71c1c; color: white; }
-.btn-save { background-color: #2e7d32; color: white; }
-.btn-cancel { background-color: transparent; color: #888888; border: 1px solid #444444; }
+
+/* Buttons modified to interact dynamically with global themes */
+.btn-edit { background-color: var(--text-main); color: var(--bg-card); }
+.btn-delete { background-color: var(--color-danger, #b71c1c); color: white; }
+.btn-save { background-color: var(--color-done, #2e7d32); color: white; }
+.btn-cancel { background-color: transparent; color: var(--text-muted); border: 1px solid var(--border-color); }
 
 .btn:hover { filter: brightness(1.2); }

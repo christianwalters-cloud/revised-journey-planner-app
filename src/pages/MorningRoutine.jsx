@@ -10,6 +10,9 @@ export default function MorningRoutine({ lockStatuses, onGratitudeFinish, onVers
 
     const isMorningDone = lockStatuses?.morning === "done";
     const [isWaitingForUnlock, setIsWaitingForUnlock] = useState(false);
+    
+    // Accessibility announcement context engine
+    const [srAnnouncement, setSrAnnouncement] = useState("");
 
     const [gratitudeList, setGratitudeList] = useState(() => {
         const saved = localStorage.getItem("morning_grateful");
@@ -41,43 +44,61 @@ export default function MorningRoutine({ lockStatuses, onGratitudeFinish, onVers
 
     const handleAddGratitude = (newText) => {
         setGratitudeList((prev) => [...prev, newText]);
+        setSrAnnouncement(`Added item to gratitude list: ${newText}`);
     };
 
     const handleDeleteGratitude = (targetIndex) => {
+        const removed = gratitudeList[targetIndex];
         setGratitudeList((prev) => prev.filter((_, index) => index !== targetIndex));
+        if (removed) {
+            setSrAnnouncement(`Deleted gratitude item: ${removed}`);
+        }
     };
 
     const handleSelectVerse = (verseObj) => {
         onSelectVerse(verseObj.id); 
+        setSrAnnouncement(`Selected focus verse: ${verseObj.verse}`);
     };
 
     const handleDeleteVerse = () => {
         onSelectVerse(""); 
+        setSrAnnouncement("Cleared your selected focus verse.");
     };
 
     const handleNextStep = () => {
         if (onGratitudeFinish) onGratitudeFinish();
         setCurrentStep("verses"); 
+        setSrAnnouncement("Moved to step 2 of 2: Focus Verse Selection Form.");
     };
 
     const handleBackStep = () => {
         setCurrentStep("gratitude");
+        setSrAnnouncement("Returned to step 1 of 2: Daily Gratitude List.");
     };
 
     const handleFinishRoutine = () => {
         if (isMorningDone) {
             navigate("/todo");
         } else {
-            if (!selectedVerseId) return alert("Please select a focus verse first.");
+            if (!selectedVerseId) {
+                setSrAnnouncement("Error: Please select a focus verse first before completing the routine.");
+                return alert("Please select a focus verse first.");
+            }
             setIsWaitingForUnlock(true);
             if (onVerseFinish) onVerseFinish(); 
+            setSrAnnouncement("Morning routine completed successfully. Redirecting to To Do List.");
         }
     };
 
     return (
         <main className="page-layout-wrapper">
+            {/* Central live announcer to safely handle background updates */}
+            <div className="sr-only" aria-live="assertive" aria-atomic="true">
+                {srAnnouncement}
+            </div>
+
             <section className="routine-container morning">
-                <h2>Morning Routine</h2>
+                <h1>Morning Routine</h1>
                 
                 {currentStep === "gratitude" ? (
                     <GratitudeStep 

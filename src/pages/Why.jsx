@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import '../css/Goals.css';
 
-function Why({ srMode = false }) {
+function Why() {
   const [goalData, setGoalData] = useState(() => {
     const saved = localStorage.getItem('user_anchor_intentions');
     if (saved) {
@@ -16,6 +16,9 @@ function Why({ srMode = false }) {
   const [isEditing, setIsEditing] = useState(false);
   const [editGoal, setEditGoal] = useState(goalData.goal);
   const [editWhy, setEditWhy] = useState(goalData.why);
+  
+  // Accessibility state engine for custom voice tracking alerts
+  const [srAnnouncement, setSrAnnouncement] = useState("");
 
   useEffect(() => {
     localStorage.setItem('user_anchor_intentions', JSON.stringify(goalData));
@@ -24,17 +27,20 @@ function Why({ srMode = false }) {
   const handleSave = (e) => {
     e.preventDefault();
     if (!editGoal.trim() || !editWhy.trim()) {
+      setSrAnnouncement("Error: Both fields must contain valid text before saving.");
       alert("Both fields must contain text before saving.");
       return;
     }
     setGoalData({ goal: editGoal.trim(), why: editWhy.trim() });
     setIsEditing(false);
+    setSrAnnouncement("Core intentions saved successfully. Swapped to display view.");
   };
 
   const handleStartEdit = () => {
     setEditGoal(goalData.goal);
     setEditWhy(goalData.why);
     setIsEditing(true);
+    setSrAnnouncement("Editing mode active. Focus moved to goal description form.");
   };
 
   const handleDelete = () => {
@@ -44,18 +50,29 @@ function Why({ srMode = false }) {
       setEditGoal("");
       setEditWhy("");
       setIsEditing(false);
+      setSrAnnouncement("All core statements have been permanently cleared. Create a new goal below.");
     }
+  };
+
+  const handleCancelEdit = () => {
+    setIsEditing(false);
+    setSrAnnouncement("Editing canceled. Reverted to previous saved intention data.");
   };
 
   const hasNoData = !goalData.goal && !goalData.why;
 
   return (
-    <div className="goals-container">
+    <main className="goals-container">
+      {/* Universal announcement region for interactive page transitions */}
+      <div className="sr-only" aria-live="assertive" aria-atomic="true">
+        {srAnnouncement}
+      </div>
+
       <h1 className="page-title">Purpose & Intentions</h1>
       <p className="page-subtitle">Define what you want to achieve and anchor it heavily to your personal motivation.</p>
 
       {!isEditing && !hasNoData && (
-        <div className="display-card-wrapper" role="region" aria-label="Current Core Intentions">
+        <section className="display-card-wrapper" aria-label="Current Core Intentions">
           <div className="goal-display-box">
             <span className="badge-tag goal-tag" aria-hidden="true">THE GOAL</span>
             <h2 className="sr-only">Your Current Goal</h2>
@@ -69,14 +86,14 @@ function Why({ srMode = false }) {
           </div>
 
           <div className="button-group-row">
-            <button className="btn btn-edit" onClick={handleStartEdit}>
-              Edit Statement {srMode && <span className="sr-only">(Opens form layout below)</span>}
+            <button type="button" className="btn btn-edit" onClick={handleStartEdit}>
+              Edit Statement <span className="sr-only">(Opens form layout below)</span>
             </button>
-            <button className="btn btn-delete" onClick={handleDelete} aria-label="Delete statement permanently">
+            <button type="button" className="btn btn-delete" onClick={handleDelete} aria-label="Delete statement permanently">
               Delete All
             </button>
           </div>
-        </div>
+        </section>
       )}
 
       {(isEditing || hasNoData) && (
@@ -89,7 +106,7 @@ function Why({ srMode = false }) {
 
           <div className="form-field-group">
             <label htmlFor="user-goal-input" className="form-label-text">
-              What is your primary goal right now? {srMode && <span className="sr-only">(Maximum 120 characters)</span>}
+              What is your primary goal right now?
             </label>
             <input
               type="text"
@@ -101,12 +118,19 @@ function Why({ srMode = false }) {
               maxLength={120}
               required
               aria-required="true"
+              aria-describedby="goal-counter"
+              autoFocus={isEditing}
             />
+            {/* Accessible character counter hook */}
+            <div id="goal-counter" className="character-counter" aria-hidden="true">
+              {editGoal.length} / 120 characters
+            </div>
+            <span className="sr-only">Maximum 120 characters. {120 - editGoal.length} remaining.</span>
           </div>
 
           <div className="form-field-group">
             <label htmlFor="user-why-input" className="form-label-text">
-              What is your deep "Why" behind this goal? {srMode && <span className="sr-only">(Maximum 400 characters)</span>}
+              What is your deep "Why" behind this goal?
             </label>
             <textarea
               id="user-why-input"
@@ -118,7 +142,13 @@ function Why({ srMode = false }) {
               maxLength={400}
               required
               aria-required="true"
+              aria-describedby="why-counter"
             />
+            {/* Accessible character counter hook */}
+            <div id="why-counter" className="character-counter" aria-hidden="true">
+              {editWhy.length} / 400 characters
+            </div>
+            <span className="sr-only">Maximum 400 characters. {400 - editWhy.length} remaining.</span>
           </div>
 
           <div className="button-group-row">
@@ -126,14 +156,14 @@ function Why({ srMode = false }) {
               {hasNoData ? "Create Statement" : "Save Changes"}
             </button>
             {!hasNoData && (
-              <button type="button" className="btn btn-cancel" onClick={() => setIsEditing(false)}>
+              <button type="button" className="btn btn-cancel" onClick={handleCancelEdit}>
                 Cancel
               </button>
             )}
           </div>
         </form>
       )}
-    </div>
+    </main>
   );
 }
 

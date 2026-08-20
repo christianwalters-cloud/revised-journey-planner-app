@@ -2,6 +2,7 @@ import { useState } from "react";
 
 function ImprovementStep({ isReadOnly, list = [], onAdd, onDelete, onNext, onBack }) {
     const [input, setInput] = useState("");
+    const [errorMsg, setErrorMsg] = useState(""); // Replaced alert windows with local error states
     const MAX_ITEMS = 3;
     const isLimitReached = list.length >= MAX_ITEMS;
 
@@ -9,8 +10,16 @@ function ImprovementStep({ isReadOnly, list = [], onAdd, onDelete, onNext, onBac
 
     const addToImprovementList = () => {
         const trimmed = input.trim();
-        if (!trimmed) return alert("Field must contain text before saving.");
-        if (list.length >= MAX_ITEMS) return alert(`Limit of ${MAX_ITEMS} entries reached.`);
+        setErrorMsg(""); // Clear out stale states
+
+        if (!trimmed) {
+            setErrorMsg("Field must contain text before saving.");
+            return;
+        }
+        if (list.length >= MAX_ITEMS) {
+            setErrorMsg(`Limit of ${MAX_ITEMS} entries reached.`);
+            return;
+        }
 
         onAdd(trimmed);
         setInput(""); 
@@ -26,19 +35,35 @@ function ImprovementStep({ isReadOnly, list = [], onAdd, onDelete, onNext, onBac
     return (
         <div className="reflections-section">
             <button className="back-btn" type="button" onClick={onBack}>
-                ← Back to what didn't go well
+                <span aria-hidden="true">← </span>Back to what didn't go well
             </button>
 
             <h3 style={{ textAlign: "center", width: "100%", display: "block" }}>
-                 Areas to work on ({list.length}/{MAX_ITEMS})
+                 Areas to work on <span aria-hidden="true">({list.length}/{MAX_ITEMS})</span>
+                 <span className="sr-only">, {list.length} of {MAX_ITEMS} items logged</span>
             </h3>
+
+            {/* Accessible Live Region for inline errors */}
+            {errorMsg && (
+                <p role="alert" className="error-message" style={{ color: "red", textAlign: "center", margin: "10px 0" }}>
+                    {errorMsg}
+                </p>
+            )}
 
             {!isReadOnly ? (
                 <div className="todo-row">
+                    {/* Hidden semantic label linked directly to input fields */}
+                    <label htmlFor="improvement-input-entry" className="sr-only">
+                        Type an area you want to work on
+                    </label>
                     <input
                         type="text"
+                        id="improvement-input-entry"
                         value={input}
-                        onChange={(e) => setInput(e.target.value)}
+                        onChange={(e) => {
+                            setInput(e.target.value);
+                            if (errorMsg) setErrorMsg("");
+                        }}
                         onKeyDown={handleKeyDown}
                         placeholder={isLimitReached ? "Limit of 3 reached" : "I want to work on..."}
                         disabled={isLimitReached}

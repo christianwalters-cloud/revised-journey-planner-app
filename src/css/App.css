@@ -26,6 +26,9 @@ body {
   --text-muted: #6c757d;
   --border-color: #dee2e6;
   
+  /* Icon Base Design Token */
+  --color-icon: #212529; /* Dark icons for light theme readability */
+  
   --color-locked: #6c757d;        
   --color-unlocked: #007bff;      
   --color-done: #2ec4b6;
@@ -43,6 +46,10 @@ body.dark-theme {
   --text-main: #f8f9fa;
   --text-muted: #a0a0a0;
   --border-color: #333333;
+  
+  /* 🚀 THEME ACCESSIBILITY FIX: Forces pure white graphics in dark layout layers */
+  --color-icon: #ffffff; 
+  
   --color-locked: #555555;
   --color-unlocked: #4da3ff;     
   --color-done: #39e3d4;         
@@ -54,6 +61,7 @@ body.light-theme {
   --text-main: #212529;
   --text-muted: #6c757d;
   --border-color: #dee2e6;
+  --color-icon: #212529;
   --color-locked: #6c757d;        
   --color-unlocked: #007bff;      
   --color-done: #2ec4b6;
@@ -83,45 +91,37 @@ body.light-theme {
   width: 90% !important;            
   max-width: 1200px !important;     
   margin-top: 40px !important;      
-  margin-left: 0 !important;
-  margin-right: 0 !important;
+  margin-left: auto !important; /* Centred layout block strategy */
+  margin-right: auto !important;
   display: flex !important;
   flex-direction: column !important;
-  align-items: center !important;    
 }
 
+/* Standard structural flex block layouts across parent views */
 .page-content > div,
 .page-content > main,
 .page-content > section {
   width: 100% !important;
   display: flex !important;
   flex-direction: column !important;
-  align-items: center !important;    
-  text-align: center !important;     
+  box-sizing: border-box;
 }
 
 /* ==========================================================================
    4. SCREEN READER & ACCESSIBILITY ACCESS OVERRIDES
    ========================================================================== */
-html.sr-accessible {
-  --transition-smooth: none !important; 
+/* Kills dynamic UI animation latency project-wide if accessibility tag fires */
+html.sr-accessible *,
+html.sr-accessible *::before,
+html.sr-accessible *::after {
+  transition: none !important;
+  animation: none !important;
 }
 
-html.sr-accessible .nav-link.status-locked {
-  opacity: 1 !important;
-  text-decoration: line-through !important; 
-}
-
-html.sr-accessible .sr-status-text {
-  font-size: 0.85rem;
-  font-weight: bold;
-  text-transform: uppercase;
-  margin-left: 8px;
-  color: var(--text-muted);
-}
-
-html.sr-accessible .sr-status-text.completed {
-  color: var(--color-done);
+/* Clear visual focus indicator styling across the entire project for keyboard navigation */
+*:focus-visible {
+  outline: 3px solid var(--color-unlocked, #007bff) !important;
+  outline-offset: 2px !important;
 }
 
 .sr-only {
@@ -135,3 +135,46 @@ html.sr-accessible .sr-status-text.completed {
   white-space: nowrap;
   border: 0;
 }
+/* ==========================================================================
+   5. UNIFIED EXTERNAL SVG FILTER SYSTEM (Both Light & Dark Modes)
+   ========================================================================== */
+
+/* --- A. BASE / REST STATES --- */
+
+/* LIGHT MODE REST STATE: Clean dark charcoal icons */
+body.light-theme .routine-card-icon,
+body.light-theme .nav-menu-icon {
+    filter: brightness(0) opacity(0.85);
+    transition: filter 0.2s ease-in-out, transform 0.2s ease-in-out;
+}
+
+/* DARK MODE REST STATE: Brilliant white icons */
+body.dark-theme .routine-card-icon,
+body.dark-theme .nav-menu-icon {
+    filter: brightness(0) invert(1) !important;
+    transition: filter 0.2s ease-in-out, transform 0.2s ease-in-out;
+}
+
+/* --- B. UNIFIED HOVER / FOCUS STATES (Turns exact Brand Blue #007bff) --- */
+.routine-card:not(.status-locked):hover .routine-card-icon,
+.routine-card:not(.status-locked):focus-visible .routine-card-icon,
+.nav-link:not(.status-locked):hover .nav-menu-icon,
+.nav-link:not(.status-locked):focus-visible .nav-menu-icon {
+    /* Decoupled math shifts both dark and white assets into #007bff dynamically */
+    filter: invert(34%) sepia(85%) saturate(2815%) hue-rotate(204deg) brightness(101%) contrast(105%) !important;
+}
+
+/* --- C. LOCKED HOVER PROTECTION (Keeps them low contrast) --- */
+
+/* Light Mode Locked Hover */
+body.light-theme .routine-card.status-locked:hover .routine-card-icon,
+body.light-theme .nav-link.status-locked:hover .nav-menu-icon {
+    filter: brightness(0) opacity(0.3) !important;
+}
+
+/* Dark Mode Locked Hover */
+body.dark-theme .routine-card.status-locked:hover .routine-card-icon,
+body.dark-theme .nav-link.status-locked:hover .nav-menu-icon {
+    filter: brightness(0) invert(1) opacity(0.35) !important;
+}
+

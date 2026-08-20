@@ -34,6 +34,9 @@ function App() {
     return { hour: now.getHours(), minute: now.getMinutes() };
   });
 
+  // Global voice announcement manager for tracking dynamic routing adjustments
+  const [srAnnouncement, setSrAnnouncement] = useState("");
+
   useEffect(() => {
     localStorage.setItem('routine_day_id', dayIdentifier);
     localStorage.setItem('routine_morning_time', morningTime);
@@ -48,7 +51,7 @@ function App() {
     localStorage.setItem('routine_todos', JSON.stringify(todos));
   }, [dayIdentifier, morningTime, nightTime, darkMode, srMode, morningGratitudeCompleted, morningVerseCompleted, todoCompleted, nightCompleted, selectedVerseId, todos]);
 
-    useEffect(() => {
+  useEffect(() => {
     const timer = setInterval(() => {
       const now = new Date();
       setCurrentTime({ hour: now.getHours(), minute: now.getMinutes() });
@@ -62,11 +65,12 @@ function App() {
         setNightCompleted(false);
         setSelectedVerseId('');
         setTodos([]);
+        setSrAnnouncement("A new day has started. Daily routine progress tracking has reset.");
       }
     }, 60000); 
 
     return () => clearInterval(timer);
-  }, []); // 🚀 FIXED: Empty array ensures the interval initializes only once
+  }, []);
 
 
   const lockStatuses = useMemo(() => {
@@ -84,6 +88,7 @@ function App() {
   const handleNavigationClick = (event, status) => {
     if (status === 'locked') {
       event.preventDefault();
+      setSrAnnouncement("This section is currently locked. Complete your active routine milestones first.");
       alert('This section is currently locked. Complete the prior routine milestones first!');
     }
   };
@@ -94,13 +99,17 @@ function App() {
   
   return (
     <div className={`app-container ${darkMode ? 'dark-mode' : 'light-mode'}`} key={dayIdentifier}>
-      <Navbar lockStatuses={lockStatuses} handleNavigationClick={handleNavigationClick} srMode={srMode} />
+      {/* Universal screen reader layout alert target zone */}
+      <div className="sr-only" aria-live="assertive" aria-atomic="true">
+        {srAnnouncement}
+      </div>
 
+      <Navbar lockStatuses={lockStatuses} handleNavigationClick={handleNavigationClick} />
       
       <div className="page-content">
         <Routes>
-          <Route path='/' element={<Home lockStatuses={lockStatuses} handleNavigationClick={handleNavigationClick} srMode={srMode} />} />
-          <Route path='/why' element={<Why srMode={srMode} />} />
+          <Route path='/' element={<Home lockStatuses={lockStatuses} handleNavigationClick={handleNavigationClick} />} />
+          <Route path='/why' element={<Why />} />
           <Route path='/settings' element={
             <Settings 
               darkMode={darkMode} setDarkMode={setDarkMode} srMode={srMode} setSrMode={setSrMode}

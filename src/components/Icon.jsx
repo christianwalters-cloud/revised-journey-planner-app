@@ -14,7 +14,7 @@ const ICON_REGISTRY = {
   whyImage: WhySvg
 };
 
-export function Icon({name, className='', ...props}) {
+export function Icon({ name, className = '', ...props }) {
   const iconSrc = ICON_REGISTRY[name]; 
 
   if (!iconSrc) {
@@ -25,7 +25,7 @@ export function Icon({name, className='', ...props}) {
   return (
     <img 
       src={iconSrc}                      
-      alt={`${name} icon`}               
+      alt="" // Explicitly empty tells screen readers this icon is decorative
       className={`nav-icon ${className}`} 
       {...props} 
     />

@@ -25,12 +25,12 @@
 }
 
 /* ==========================================================================
-   2. INTERACTIVE ROUTINE CARDS (Default Dark Canvas)
+   2. INTERACTIVE ROUTINE CARDS (Adaptive Light/Dark Mechanics)
    ========================================================================== */
 .routine-card {
-    flex: 1;
-  background-color: #1a1a1a;
-  border: 0.0625rem solid #333333;
+  flex: 1;
+  background-color: var(--bg-card); /* Adapts automatically between #1e1e1e and #ffffff */
+  border: 0.0625rem solid var(--border-color);
   border-radius: var(--radius-standard);
   padding: 2.5rem 2rem;
   gap: 1.25rem;
@@ -38,44 +38,86 @@
   transition: var(--transition-smooth);
 }
 
+/* Custom internal layout wrapper guarantees smooth vertical flex distribution */
+.card-visual-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  width: 100%;
+}
+
 .routine-card h2 {
   font-size: 1.35rem;
   font-weight: 600;
-  color: #ffffff;
+  color: var(--text-main); /* Flips cleanly between dark charcoal and light grey */
+  margin: 0;
+  text-align: center;
+}
+
+.card-icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .routine-card-icon {
   width: 54px !important;
   height: 54px !important;
-  filter: brightness(0) invert(1);
-  transition: filter 0.25s ease-in-out;
+  /* 🚀 Automatically shifts the SVG silhouette token color to white in dark mode */
+  color: var(--color-icon); 
+  fill: currentColor;
+  transition: transform 0.2s ease, color 0.2s ease;
 }
 
 .card-status-indicator {
   font-size: 1.75rem;
   margin-top: 0.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* ==========================================================================
    3. CARD INTERACTION STATES & STATUS BADGES
    ========================================================================== */
 .routine-card.status-locked {
-  opacity: 0.3;
+  opacity: 0.35; /* Meets target contrast visibility guidelines for disabled views */
   cursor: not-allowed;
 }
 
-.routine-card:not(.status-locked):hover {
-  transform: translateY(-4px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-  background-color: #ffffff;
+/* Explicitly blocks highlight coloring states from bleeding into locked components */
+.routine-card.status-locked:hover,
+.routine-card.status-locked:focus-visible {
+  transform: none !important;
+  box-shadow: none !important;
+  border-color: var(--border-color) !important;
+  outline: none !important;
 }
 
-.routine-card:not(.status-locked):hover h2 {
+.routine-card.status-locked:hover h2,
+.routine-card.status-locked:hover .routine-card-icon {
+  color: var(--color-icon) !important;
+}
+
+/* Valid active interaction rules for unlocked or completed routine dashboard items */
+.routine-card:not(.status-locked):hover,
+.routine-card:not(.status-locked):focus-visible {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+  border-color: var(--color-unlocked);
+}
+
+.routine-card:not(.status-locked):hover h2,
+.routine-card:not(.status-locked):focus-visible h2 {
   color: var(--color-unlocked);
 }
 
-.routine-card:not(.status-locked):hover .routine-card-icon {
-  filter: invert(34%) sepia(85%) saturate(2815%) hue-rotate(204deg) brightness(101%) contrast(105%) !important;
+.routine-card:not(.status-locked):hover .routine-card-icon,
+.routine-card:not(.status-locked):focus-visible .routine-card-icon {
+  color: var(--color-unlocked);
+  transform: scale(1.05);
 }
 
 .routine-card.status-unlocked {
@@ -86,18 +128,6 @@
   border-color: var(--color-done);
 }
 
-.status-badge.locked { color: #888888; }
+.status-badge.locked { color: var(--text-muted); }
 .status-badge.unlocked { color: var(--color-unlocked); }
 .status-badge.complete { color: var(--color-done); font-weight: bold; }
-
-/* ==========================================================================
-   4. SYSTEM THEME FALLBACK CONTROLS
-   ========================================================================== */
-body.dark-theme .routine-card {
-  background-color: #0a0a0a;
-  border-color: #222222;
-}
-
-body.dark-theme .routine-card:not(.status-locked):hover {
-  background-color: var(--bg-card);
-}

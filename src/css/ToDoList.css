@@ -71,6 +71,7 @@
   align-items: center;
   gap: 12px;
   flex: 1;
+  cursor: pointer;
 }
 
 .task-checkbox-indicator {
@@ -90,6 +91,16 @@
 
 .todo-list-item.active-item:hover {
   border-color: var(--color-unlocked);
+}
+
+/* Active focus rings for native checkboxes and utility button row items */
+.task-checkbox-indicator:focus-visible,
+.todo-row input[type="text"]:focus-visible,
+.todo-row button:focus-visible,
+.delete-btn:focus-visible,
+.next-step-btn.todo-finalize-nav-btn:focus-visible {
+  outline: 3px solid var(--color-unlocked) !important;
+  outline-offset: 2px !important;
 }
 
 .todo-list-item.completed-item {
@@ -141,13 +152,16 @@
   padding: 0.85rem;
   border-radius: 8px;
   font-weight: bold;
+  box-sizing: border-box;
   transition: var(--transition-smooth);
 }
 
 .next-step-btn.todo-finalize-nav-btn:hover {
   filter: brightness(1.1);
 }
+
 .starred-main-task {
-    border-left: 4px solid #ffd700; /* Adds a nice gold accent line on the left side */
-    font-weight: bold;             /* Makes the text pop */
+  border-left: 4px solid #ffd700 !important; /* Adds a nice gold accent line on the left side */
+  font-weight: bold;             /* Makes the text pop */
 }
+

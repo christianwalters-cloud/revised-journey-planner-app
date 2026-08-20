@@ -2,6 +2,7 @@ import { useState } from "react";
 
 function WeaknessesStep({ isReadOnly, list = [], onAdd, onDelete, onNext, onBack }) {
     const [input, setInput] = useState("");
+    const [errorMsg, setErrorMsg] = useState(""); // Replaced alert windows with local error states
     const MAX_ITEMS = 3;
     const isLimitReached = list.length >= MAX_ITEMS;
 
@@ -9,8 +10,16 @@ function WeaknessesStep({ isReadOnly, list = [], onAdd, onDelete, onNext, onBack
 
     const addToWeaknessesList = () => {
         const trimmed = input.trim();
-        if (!trimmed) return alert("Field must contain text before saving.");
-        if (list.length >= MAX_ITEMS) return alert(`Limit of ${MAX_ITEMS} entries reached.`);
+        setErrorMsg(""); // Clear out stale states
+
+        if (!trimmed) {
+            setErrorMsg("Field must contain text before saving.");
+            return;
+        }
+        if (list.length >= MAX_ITEMS) {
+            setErrorMsg(`Limit of ${MAX_ITEMS} entries reached.`);
+            return;
+        }
 
         onAdd(trimmed);
         setInput(""); 
@@ -26,19 +35,35 @@ function WeaknessesStep({ isReadOnly, list = [], onAdd, onDelete, onNext, onBack
     return (
         <div className="reflections-section">
             <button className="back-btn" type="button" onClick={onBack}>
-                ← Back to what went well
+                <span aria-hidden="true">← </span>Back to what went well
             </button>
 
             <h3 style={{ textAlign: "center", width: "100%", display: "block" }}>
-                What didn't go well today ({list.length}/{MAX_ITEMS})
+                What didn't go well today <span aria-hidden="true">({list.length}/{MAX_ITEMS})</span>
+                <span className="sr-only">, {list.length} of {MAX_ITEMS} items logged</span>
             </h3>
+
+            {/* Accessible Live Region for inline errors */}
+            {errorMsg && (
+                <p role="alert" className="error-message" style={{ color: "red", textAlign: "center", margin: "10px 0" }}>
+                    {errorMsg}
+                </p>
+            )}
 
             {!isReadOnly ? (
                 <div className="todo-row">
+                    {/* Hidden semantic label linked directly to input fields */}
+                    <label htmlFor="weaknesses-input-entry" className="sr-only">
+                        Type something that didn't go well today
+                    </label>
                     <input
                         type="text"
+                        id="weaknesses-input-entry"
                         value={input}
-                        onChange={(e) => setInput(e.target.value)}
+                        onChange={(e) => {
+                            setInput(e.target.value);
+                            if (errorMsg) setErrorMsg("");
+                        }}
                         onKeyDown={handleKeyDown}
                         placeholder={isLimitReached ? "Limit of 3 reached" : "Something that didn't go well..."}
                         disabled={isLimitReached}
@@ -66,7 +91,7 @@ function WeaknessesStep({ isReadOnly, list = [], onAdd, onDelete, onNext, onBack
                                 type="button" 
                                 className="delete-btn" 
                                 onClick={() => onDelete(index)}
-                                aria-label={`Delete item ${index + 1}`}
+                                aria-label={`Delete weakness item ${index + 1}`}
                             >
                                 ✕
                             </button>
@@ -87,7 +112,7 @@ function WeaknessesStep({ isReadOnly, list = [], onAdd, onDelete, onNext, onBack
                     margin: "1.5rem auto 0 auto" 
                 }}
             >
-                Continue to how can I improve →
+                Continue to how can I improve? <span aria-hidden="true">→</span>
             </button>
         </div>
     );

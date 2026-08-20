@@ -25,11 +25,12 @@ section.routine-container.morning {
   transition: var(--transition-smooth);
 }
 
-.routine-container.morning h2 {
+section.routine-container.morning h1 {
   font-size: 1.75rem;
   font-weight: 700;
   color: var(--text-main);
   margin-bottom: 0.5rem;
+  text-align: left;
 }
 
 /* ==========================================================================
@@ -61,6 +62,11 @@ section.routine-container.morning {
   font-style: italic;
   font-size: 0.95rem;
   text-align: left;
+}
+
+.error-message {
+  font-weight: 600;
+  font-size: 0.95rem;
 }
 
 /* ==========================================================================
@@ -205,7 +211,6 @@ ul.todo-list li {
   line-height: 1.4;
 }
 
-/* 🚀 States Matching the Core Logic Enhancements */
 .verse-selection-card.disabled {
   opacity: 0.4;
   cursor: not-allowed;
@@ -214,7 +219,7 @@ ul.todo-list li {
 
 .verse-selection-card.already-selected {
   border-color: var(--color-done) !important;
-  background-color: rgba(46, 196, 182, 0.08) !important; /* Subtle tint matching your done colour */
+  background-color: rgba(46, 196, 182, 0.08) !important;
   cursor: default;
   transform: none !important;
 }
@@ -249,7 +254,18 @@ ul.todo-list li {
   transform: scale(0.97);
 }
 
-/* Contextual Button Styles using theme hooks */
+/* Keyboard indicators matching standard theme layouts */
+.todo-row button[type="button"]:focus-visible,
+.back-btn:focus-visible,
+.next-step-btn:focus-visible,
+.complete-btn:focus-visible,
+.delete-btn:focus-visible,
+.category-tab-btn:focus-visible,
+.verse-selection-card:focus-visible {
+  outline: 3px solid var(--color-unlocked) !important;
+  outline-offset: 2px !important;
+}
+
 .todo-row button[type="button"] {
   background-color: var(--text-main);
   color: var(--bg-card);
@@ -273,6 +289,13 @@ ul.todo-list li {
   color: #ffffff;
   align-self: center;
   margin-top: 1rem;
+}
+
+.next-step-btn:disabled,
+.complete-btn:disabled {
+  opacity: 0.5 !important;
+  cursor: not-allowed !important;
+  transform: none !important;
 }
 
 .center-btn-wrapper {

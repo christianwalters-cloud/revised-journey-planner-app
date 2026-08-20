@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+/* 🚀 ACCESSIBILITY & UX FIX: Added useNavigate for automatic page redirection */
+import { useNavigate } from "react-router-dom"; 
 import '../css/ToDoList.css';
 
 export default function ToDoList({ isReadOnly, onTodoRoutineFinish }) {
     const MAX_TASKS = 5;
+    const navigate = useNavigate(); // Initialize the navigation engine
 
     const [tasks, setTasks] = useState(() => {
         const saveData = localStorage.getItem("todo_tasks_data");
@@ -11,6 +13,7 @@ export default function ToDoList({ isReadOnly, onTodoRoutineFinish }) {
     });
 
     const [inputValue, setInputValue] = useState("");
+    const [srAnnouncement, setSrAnnouncement] = useState("");
 
     useEffect(() => {
         localStorage.setItem("todo_tasks_data", JSON.stringify(tasks));
@@ -21,12 +24,11 @@ export default function ToDoList({ isReadOnly, onTodoRoutineFinish }) {
         
         const trimmed = inputValue.trim();
         if (trimmed === "") {
-            alert("You must write something!");
+            setSrAnnouncement("Error: You must write a task description first.");
             return;
         }
         if (tasks.length >= MAX_TASKS) {
-            alert("Your task list is full! Please remove an item before adding a new one.");
-            setInputValue("");
+            setSrAnnouncement("Error: Your task list is full. Remove an item before adding a new one.");
             return;
         }
 
@@ -41,26 +43,37 @@ export default function ToDoList({ isReadOnly, onTodoRoutineFinish }) {
 
         setTasks((prevTasks) => [...prevTasks, newTask]);
         setInputValue("");
+        setSrAnnouncement(`Added task: ${trimmed}${isFirstTask ? " as your Hero Task" : ""}`);
     };
 
     const handleToggleComplete = (idToToggle) => {
         if (isReadOnly) return; 
         setTasks((prevTasks) =>
-            prevTasks.map(task => 
-                task.id === idToToggle ? { ...task, completed: !task.completed } : task
-            )
+            prevTasks.map(task => {
+                if (task.id === idToToggle) {
+                    const nextState = !task.completed;
+                    setSrAnnouncement(`Marked task "${task.text}" as ${nextState ? "completed" : "pending"}`);
+                    return { ...task, completed: nextState };
+                }
+                return task;
+            })
         );
     };
 
     const handleDeleteTask = (idToDelete) => {
         if (isReadOnly) return; 
+        const taskToRemove = tasks.find(t => t.id === idToDelete);
         setTasks((prevTasks) => prevTasks.filter(task => task.id !== idToDelete));
+        if (taskToRemove) {
+            setSrAnnouncement(`Deleted task: ${taskToRemove.text}`);
+        }
     };
 
     const handleRemoveAllTasks = () => {
         if (isReadOnly) return; 
         setTasks([]);
         setInputValue("");
+        setSrAnnouncement("All items cleared from your daily to-do list.");
     };
 
     const handleKeyDown = (e) => {
@@ -70,39 +83,50 @@ export default function ToDoList({ isReadOnly, onTodoRoutineFinish }) {
         }
     };
 
+    /* 🚀 ACCESSIBILITY & NAVIGATION HANDLER */
+    const handleFinalizeAndNavigate = () => {
+        if (onTodoRoutineFinish) onTodoRoutineFinish(); 
+        setSrAnnouncement("To-do list finalized. Unlocking and navigating to your Night Routine.");
+        
+        // Brief timeout ensures screen readers process the spoken announcement before the DOM unmounts
+        setTimeout(() => {
+            navigate("/night-routine"); 
+        }, 200);
+    };
+
     const activeTasks = tasks.filter(task => !task.completed);
     const completedTasks = tasks.filter(task => task.completed);
+    
+    // Core structural check to evaluate when all logged goals are complete
     const showUnlockMessage = tasks.length > 0 && tasks.every(t => t.completed);
-
-    const canProceed = isReadOnly || showUnlockMessage;
-
-    const dynamicPlaceholderText = tasks.length === 0 
-        ? "Add your Hero Task... ⭐" 
-        : "Add a regular task...";
-
-    const dynamicButtonText = tasks.length === 0 
-        ? "Add Hero Task" 
-        : "Add Task";
 
     return (
         <main className="page-layout-wrapper">
+            <div className="sr-only" aria-live="assertive" aria-atomic="true">
+                {srAnnouncement}
+            </div>
+
             <section className="routine-container morning">
-                
-                <h3 className="todo-centered-header">
-                    Daily To-Do List ({completedTasks.length}/{tasks.length})
-                </h3>
+                <h1 className="todo-centered-header">
+                    Daily To-Do List <span aria-hidden="true">({completedTasks.length}/{tasks.length})</span>
+                    <span className="sr-only">, {completedTasks.length} of {tasks.length} tasks completed</span>
+                </h1>
 
                 {!isReadOnly ? (
                     <div className="todo-row">
+                        <label htmlFor="todo-input-entry" className="sr-only">
+                            Type a daily task description
+                        </label>
                         <input 
                             type="text" 
-                            placeholder={dynamicPlaceholderText} 
+                            id="todo-input-entry"
+                            placeholder={tasks.length === 0 ? "Add your Hero Task... ⭐" : "Add a regular task..."} 
                             value={inputValue} 
                             onChange={(e) => setInputValue(e.target.value)}
                             onKeyDown={handleKeyDown}
                         />
                         <button type="button" onClick={handleAddTask}>
-                            {dynamicButtonText}
+                            {tasks.length === 0 ? "Add Hero Task" : "Add Task"}
                         </button>
                         <button type="button" id="removeTasksBtn" onClick={handleRemoveAllTasks}>Remove All</button>
                     </div>
@@ -113,34 +137,30 @@ export default function ToDoList({ isReadOnly, onTodoRoutineFinish }) {
                 )}
 
                 {!isReadOnly && (
-                    <div className="counter-display">
+                    <div className="counter-display" aria-live="polite">
                         Tasks Logged: {tasks.length} / {MAX_TASKS}
                     </div>
                 )}
 
                 {activeTasks.length > 0 && (
                     <div className="task-sub-section">
-                        <h4 className="task-section-title pending">PENDING</h4>
+                        <h2 className="task-section-title pending">PENDING</h2>
                         <ul className="todo-list">
                             {activeTasks.map((task) => (
                                 <li key={task.id} className={`todo-list-item active-item ${task.isStarred ? 'starred-main-task' : ''}`}>
-                                    <div 
-                                        className="task-clickable-area"
-                                        role="button"
-                                        tabIndex={isReadOnly ? -1 : 0}
-                                        onClick={() => handleToggleComplete(task.id)}
-                                        onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && handleToggleComplete(task.id)}
-                                    >
-                                        {!isReadOnly && (
-                                            <input 
-                                                type="checkbox" 
-                                                checked={false} 
-                                                readOnly 
-                                                className="task-checkbox-indicator" 
-                                            />
-                                        )}
-                                        <span className="item-text">{task.isStarred && "⭐ "}{task.text}</span>
-                                    </div>
+                                    <label className="task-clickable-area">
+                                        <input 
+                                            type="checkbox" 
+                                            checked={task.completed} 
+                                            disabled={isReadOnly}
+                                            onChange={() => handleToggleComplete(task.id)}
+                                            className="task-checkbox-indicator" 
+                                        />
+                                        <span className="item-text">
+                                            {task.isStarred && <span aria-label="Hero Task: ">⭐ </span>}
+                                            {task.text}
+                                        </span>
+                                    </label>
                                     {!isReadOnly && (
                                         <button 
                                             type="button"
@@ -159,25 +179,23 @@ export default function ToDoList({ isReadOnly, onTodoRoutineFinish }) {
 
                 {completedTasks.length > 0 && (
                     <div className="task-sub-section">
-                        <h4 className="task-section-title completed">COMPLETED</h4>
+                        <h2 className="task-section-title completed">COMPLETED</h2>
                         <ul className="todo-list">
                             {completedTasks.map((task) => (
                                 <li key={task.id} className={`todo-list-item completed-item ${task.isStarred ? 'starred-main-task' : ''}`}>
-                                    <div 
-                                        className="task-clickable-area"
-                                        role="button"
-                                        tabIndex={isReadOnly ? -1 : 0}
-                                        onClick={() => handleToggleComplete(task.id)}
-                                        onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && handleToggleComplete(task.id)}
-                                    >
+                                    <label className="task-clickable-area">
                                         <input 
                                             type="checkbox" 
-                                            checked={true} 
-                                            readOnly 
+                                            checked={task.completed} 
+                                            disabled={isReadOnly}
+                                            onChange={() => handleToggleComplete(task.id)}
                                             className="task-checkbox-indicator" 
                                         />
-                                        <span className="item-text">{task.isStarred && "⭐ "}{task.text}</span>
-                                    </div>
+                                        <span className="item-text">
+                                            {task.isStarred && <span aria-label="Hero Task: ">⭐ </span>}
+                                            {task.text}
+                                        </span>
+                                    </label>
                                     {!isReadOnly && (
                                         <button 
                                             type="button"
@@ -194,24 +212,16 @@ export default function ToDoList({ isReadOnly, onTodoRoutineFinish }) {
                     </div>
                 )}
 
-                <div className="center-btn-wrapper" style={{ margin: "2rem auto 0 auto", display: "block", textAlign: "center" }}>
-                    <button 
-                        className="complete-btn" 
-                        type="button" 
-                        onClick={onTodoRoutineFinish}
-                        disabled={!canProceed}
-                        style={{
-                            opacity: canProceed ? 1 : 0.5,
-                            cursor: canProceed ? 'pointer' : 'not-allowed',
-                            padding: "0.8rem 2rem",
-                            fontSize: "1rem"
-                        }}
-                    >
-                        {isReadOnly ? "Return to Dashboard →" : "Complete Daily List ✔"}
-                    </button>
-                </div>
-
+                {showUnlockMessage && !isReadOnly && (
+                    <div className="unlock-routine-wrapper">
+                        <p>All daily goals achieved!</p>
+                        <button type="button" className="next-step-btn"  onClick={handleFinalizeAndNavigate}>
+                            Proceed to Night Routine
+                        </button>
+                    </div>
+                )}
             </section>
         </main>
     );
 }
+

@@ -26,6 +26,9 @@ export default function NightRoutine({ lockStatuses, onNightFinish }) {
     });
 
     const [currentStep, setCurrentStep] = useState("strengths");
+    
+    // Accessibility announcement context engine
+    const [srAnnouncement, setSrAnnouncement] = useState("");
 
     useEffect(() => {
         localStorage.setItem("night_strengths", JSON.stringify(strengthsList));
@@ -48,16 +51,43 @@ export default function NightRoutine({ lockStatuses, onNightFinish }) {
         }
     }, [isNightDone, lockStatuses?.night]);
 
-    const handleAddStrength = (text) => setStrengthsList((prev) => [...prev, text]);
-    const handleDeleteStrength = (index) => setStrengthsList((prev) => prev.filter((_, i) => i !== index));
+    const handleAddStrength = (text) => {
+        setStrengthsList((prev) => [...prev, text]);
+        setSrAnnouncement(`Added item to your strengths list: ${text}`);
+    };
+    const handleDeleteStrength = (index) => {
+        const removed = strengthsList[index];
+        setStrengthsList((prev) => prev.filter((_, i) => i !== index));
+        if (removed) setSrAnnouncement(`Deleted item: ${removed}`);
+    };
 
-    const handleAddWeakness = (text) => setWeaknessesList((prev) => [...prev, text]);
-    const handleDeleteWeakness = (index) => setWeaknessesList((prev) => prev.filter((_, i) => i !== index));
+    const handleAddWeakness = (text) => {
+        setWeaknessesList((prev) => [...prev, text]);
+        setSrAnnouncement(`Added item to your weaknesses list: ${text}`);
+    };
+    const handleDeleteWeakness = (index) => {
+        const removed = weaknessesList[index];
+        setWeaknessesList((prev) => prev.filter((_, i) => i !== index));
+        if (removed) setSrAnnouncement(`Deleted item: ${removed}`);
+    };
 
-    const handleAddImprovement = (text) => setImprovementsList((prev) => [...prev, text]);
-    const handleDeleteImprovement = (index) => setImprovementsList((prev) => prev.filter((_, i) => i !== index));
+    const handleAddImprovement = (text) => {
+        setImprovementsList((prev) => [...prev, text]);
+        setSrAnnouncement(`Added improvement goal: ${text}`);
+    };
+    const handleDeleteImprovement = (index) => {
+        const removed = improvementsList[index];
+        setImprovementsList((prev) => prev.filter((_, i) => i !== index));
+        if (removed) setSrAnnouncement(`Deleted item: ${removed}`);
+    };
+
+    const handleStepChange = (nextStepName, stepDescription) => {
+        setCurrentStep(nextStepName);
+        setSrAnnouncement(stepDescription);
+    };
 
     const handleFinishRoutine = () => {
+        setSrAnnouncement("Night routine submitted successfully. Returning home.");
         if (isNightDone) {
             navigate("/");
         } else {
@@ -68,8 +98,13 @@ export default function NightRoutine({ lockStatuses, onNightFinish }) {
 
    return (
     <main className="page-layout-wrapper">
+        {/* Central live announcer to safely handle background updates */}
+        <div className="sr-only" aria-live="assertive" aria-atomic="true">
+            {srAnnouncement}
+        </div>
+
         <section className="routine-container night">
-            <h2>Night Routine</h2>
+            <h1>Night Routine</h1>
 
             {currentStep === "strengths" && (
                 <StrengthsStep
@@ -77,7 +112,7 @@ export default function NightRoutine({ lockStatuses, onNightFinish }) {
                     list={strengthsList}
                     onAdd={handleAddStrength}
                     onDelete={handleDeleteStrength}
-                    onNext={() => setCurrentStep("weaknesses")}
+                    onNext={() => handleStepChange("weaknesses", "Moved to step 2 of 3: Daily Weaknesses Form.")}
                 />
             )}
 
@@ -87,8 +122,8 @@ export default function NightRoutine({ lockStatuses, onNightFinish }) {
                     list={weaknessesList}
                     onAdd={handleAddWeakness}
                     onDelete={handleDeleteWeakness}
-                    onNext={() => setCurrentStep("improvements")}
-                    onBack={() => setCurrentStep("strengths")} // 🚀 FIX: Connects the back button wire
+                    onNext={() => handleStepChange("improvements", "Moved to step 3 of 3: Areas of Improvement Form.")}
+                    onBack={() => handleStepChange("strengths", "Returned to step 1 of 3: Daily Strengths Form.")}
                 />
             )}
 
@@ -99,7 +134,7 @@ export default function NightRoutine({ lockStatuses, onNightFinish }) {
                     onAdd={handleAddImprovement}
                     onDelete={handleDeleteImprovement}
                     onNext={handleFinishRoutine}
-                    onBack={() => setCurrentStep("weaknesses")} // 🚀 FIX: Connects the back button wire
+                    onBack={() => handleStepChange("weaknesses", "Returned to step 2 of 3: Daily Weaknesses Form.")}
                 />
             )}
         </section>

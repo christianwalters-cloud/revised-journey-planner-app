@@ -1,6 +1,35 @@
 /* ==========================================================================
-   1. SETTINGS CONTAINER & LIST (Bullet Removal)
+   1. GLOBAL UTILITY CLASSES
    ========================================================================== */
+/* Standard utility class to hide text visually but keep it for screen readers */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* ==========================================================================
+   2. SETTINGS CONTAINER & LIST (Perfect Symmetrical Centring)
+   ========================================================================== */
+.settings-container {
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* Base style rules for your main page heading anchor */
+.settings-container h1 {
+    text-align: center;
+    color: var(--text-main);
+    margin-bottom: 24px;
+}
+
 .settings-list {
     display: flex;
     flex-direction: column;
@@ -21,15 +50,48 @@
     list-style: none;
     list-style-type: none;
     box-sizing: border-box; 
-    background-color: #1a1a1a;
-    color: white;
-    border: 0.0625rem solid #333333;
-    border-radius: var(--radius-standard);
-    padding: 2.5rem 2rem;
+    background-color: var(--bg-card);
+    color: var(--text-main);
+    border: 0.0625rem solid var(--border-color);
+    border-radius: var(--radius-standard, 12px);
+    padding: 2rem;
+    
+    /* 🎯 PERFECT CROSS-AXIS CENTERING */
     display: flex;
-    flex-direction: column;
-    gap: 1.25rem;
+    flex-direction: row;        /* Swaps item flow to a clean horizontal line */
+    align-items: center;        /* Vertically centers everything on the axis row */
+    justify-content: space-between; /* Pushes text description left, checkbox right */
+    gap: 1.5rem;
     transition: var(--transition-smooth);
+}
+
+.setting-text {
+    flex: 1;                    /* Allows layout description block to stretch safely */
+    text-align: left;           /* Keeps your text clean and readable left-aligned */
+}
+
+.setting-text h2 {
+    margin: 0 0 6px 0;
+    font-size: 1.3rem;
+}
+
+.setting-text p {
+    margin: 0;
+    color: var(--text-muted, #b3b3b3);
+    font-size: 0.95rem;
+    line-height: 1.4;
+}
+
+/* Symmetrical alignment wrapper anchor for checkbox/slider elements */
+.switch-label,
+.settings-checkbox,
+.settings-time-input {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 !important;       /* Clean out float shifts or custom text offsets */
+    align-self: center !important; /* Force browser axis element centering bounds */
+    flex-shrink: 0;             /* Prevents layout elements from shrinking or squashing */
 }
 
 .settings-checkbox {
@@ -37,12 +99,18 @@
     height: 14px;                
     transform: scale(1.5);       
     cursor: pointer;             
-    margin: 10px;                
-    align-self: center;          
 }
 
+/* Accessibility Focus Indicator Strategy */
+.settings-checkbox:focus-visible,
+.settings-time-input:focus-visible {
+    outline: 3px solid var(--color-unlocked, #007bff);
+    outline-offset: 4px;
+}
+
+
 /* ==========================================================================
-   2. TIME INPUTS (White Canvas / Black Border)
+   3. TIME INPUTS (White Canvas / Black Border)
    ========================================================================== */
 .settings-time-input {
     align-self: center;          
@@ -61,14 +129,111 @@
     border: 2px solid #000000;   
 }
 
+/* Accessible focus ring for keyboard tab navigation users */
+.settings-time-input:focus-visible {
+    outline: 3px solid #007bff;
+    outline-offset: 2px;
+}
+
 .settings-time-input::-webkit-calendar-picker-indicator {
     filter: invert(0);           
 }
 
 /* ==========================================================================
-   3. DANGER ZONE CENTERED ELEMENT
+   4. DANGER ZONE CENTERED ELEMENT & ACTIONS
    ========================================================================== */
 .danger-zone-feature {
     align-items: center !important;
     text-align: center !important;
+}
+
+.danger-zone-actions button:focus-visible {
+    outline: 3px solid #007bff;
+    outline-offset: 2px;
+}
+/* ==========================================================================
+   5. DANGER ZONE ISOLATED SPACING WRAPPERS
+   ========================================================================== */
+.setting-item.danger-zone-feature {
+    display: block !important;          /* Overrides horizontal flex row constraints completely */
+    padding: 2rem !important;
+}
+
+.danger-zone-wrapper {
+    display: flex;
+    flex-direction: column;            /* Forces content to stack vertically */
+    align-items: flex-start;           /* Clean left alignments */
+    gap: 1.5rem;                       /* Generates comfortable spacing between text and buttons */
+    width: 100%;
+}
+
+.setting-item.danger-zone-feature .setting-text {
+    width: 100%;
+    text-align: left;
+}
+
+.danger-zone-actions {
+    width: 100%;
+    display: flex;
+    flex-direction: row;               /* Positions reset and cancel side by side */
+    gap: 16px;                         /* Spacious button margins */
+    box-sizing: border-box;
+}
+
+/* Master Reset Button Layout Rule Base */
+.master-clear-btn {
+    background-color: var(--color-danger, #e63946) !important;
+    color: #ffffff !important;
+    border: none !important;
+    padding: 14px 24px !important;     /* Enlarged click targets for muscle mobility */
+    border-radius: 8px !important;
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    transition: filter 0.2s ease, transform 0.1s ease !important;
+    flex: 2;                           /* Button scales elegantly across the layout canvas */
+}
+
+.master-clear-btn:hover {
+    filter: brightness(1.15);
+}
+
+.master-clear-btn:active {
+    transform: scale(0.98);
+}
+
+/* Master Cancel Button Layout Rule Base */
+.master-cancel-btn {
+    background-color: transparent !important;
+    color: var(--text-main, #212529) !important;
+    border: 2px solid var(--text-main, #212529) !important;
+    padding: 14px 24px !important;
+    border-radius: 8px !important;
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    transition: background-color 0.2s ease !important;
+    flex: 1;
+}
+
+.master-cancel-btn:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+body.dark-theme .master-cancel-btn:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+/* Responsive layout override for mini viewport devices */
+@media (max-width: 480px) {
+    .danger-zone-actions {
+        flex-direction: column;        /* Stacks action buttons vertically on mobile screens */
+        gap: 12px;
+    }
+    
+    .master-clear-btn, 
+    .master-cancel-btn {
+        width: 100%;
+        flex: none;
+    }
 }

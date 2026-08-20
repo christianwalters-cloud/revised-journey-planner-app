@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Icon } from "./Icon"; 
 import "../css/Navbar.css";
 
-function Navbar({ lockStatuses, handleNavigationClick, srMode = false }) {
+function Navbar({ lockStatuses, handleNavigationClick }) {
   const [isOpen, setIsOpen] = useState(false);
   
   const navItems = [
@@ -22,9 +22,16 @@ function Navbar({ lockStatuses, handleNavigationClick, srMode = false }) {
   return (
     <nav className="navbar" aria-label="Main Navigation">
       <div className="navbar-logo">
-        <Link to="/" className="nav-link logo-link" onClick={() => setIsOpen(false)}>
-          <Icon name="homeImage" className="nav-menu-icon" aria-hidden="true" />
-          <span>Journey</span>
+        <Link 
+          to="/" 
+          className="nav-link logo-link" 
+          onClick={() => setIsOpen(false)}
+          aria-label="Journey Home"
+        >
+          <div aria-hidden="true" className="nav-link-visual-content">
+            <Icon name="homeImage" className="nav-menu-icon" />
+            <span>Journey</span>
+          </div>
         </Link>
       </div>
 
@@ -35,9 +42,9 @@ function Navbar({ lockStatuses, handleNavigationClick, srMode = false }) {
         aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
         aria-expanded={isOpen}
       >
-        <span className="hamburger-line"></span>
-        <span className="hamburger-line"></span>
-        <span className="hamburger-line"></span>
+        <span className="hamburger-line" aria-hidden="true"></span>
+        <span className="hamburger-line" aria-hidden="true"></span>
+        <span className="hamburger-line" aria-hidden="true"></span>
       </button>
       
       <ul className={`navbar-menu ${isOpen ? "mobile-open" : ""}`}>
@@ -46,38 +53,55 @@ function Navbar({ lockStatuses, handleNavigationClick, srMode = false }) {
           const isDone = status === "done";
           const isLocked = status === "locked";
           
+          // Structure single clean phrases for clear layout reading values
+          const displayStatus = isDone ? "Completed" : status.charAt(0).toUpperCase() + status.slice(1);
+          const accessibleLinkLabel = `${label}, ${displayStatus}`;
+          
           return (
             <li key={key}>
               <Link 
-                to={isLocked ? "/" : path}
+                to={isLocked ? "#" : path}
                 onClick={(e) => handleRoutineClick(e, status)}
                 className={`nav-link status-${status}`}
+                aria-label={accessibleLinkLabel}
+                aria-disabled={isLocked}
               >
-                <Icon name={iconName} className="nav-menu-icon" aria-hidden="true" />
-                <span>{label}</span>
-                {isDone && (
-                  srMode ? (
-                    <span className="sr-status-text completed" style={{ marginLeft: "6px" }}>(Completed)</span>
-                  ) : (
-                    <span className="done-check" aria-hidden="true">✓</span>
-                  )
-                )}
+                {/* Child text wrapper cleanly shields decorative nodes from speech synthesizers */}
+                <div aria-hidden="true" className="nav-link-visual-content">
+                  <Icon name={iconName} className="nav-menu-icon" />
+                  <span>{label}</span>
+                  {isDone && <span className="done-check">✓</span>}
+                </div>
               </Link>
             </li>
           );
         })}
 
         <li>
-          <Link to="/why" className="nav-link" onClick={() => setIsOpen(false)}>
-            <Icon name="whyImage" className="nav-menu-icon" aria-hidden="true" />
-            <span>Why</span>
+          <Link 
+            to="/why" 
+            className="nav-link" 
+            onClick={() => setIsOpen(false)}
+            aria-label="Why, Purpose and intentions page"
+          >
+            <div aria-hidden="true" className="nav-link-visual-content">
+              <Icon name="whyImage" className="nav-menu-icon" />
+              <span>Why</span>
+            </div>
           </Link>
         </li>
         
         <li>
-          <Link to="/settings" className="nav-link" onClick={() => setIsOpen(false)}>
-            <Icon name="settingsImage" className="nav-menu-icon" aria-hidden="true" />
-            <span>Settings</span>
+          <Link 
+            to="/settings" 
+            className="nav-link" 
+            onClick={() => setIsOpen(false)}
+            aria-label="Settings, Configuration panel"
+          >
+            <div aria-hidden="true" className="nav-link-visual-content">
+              <Icon name="settingsImage" className="nav-menu-icon" />
+              <span>Settings</span>
+            </div>
           </Link>
         </li>
       </ul>

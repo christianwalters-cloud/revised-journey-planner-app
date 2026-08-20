@@ -6,6 +6,7 @@ const ROUTINE_CATEGORIES = [...new Set(selectableBibleVerses.map(v => v.category
 export default function VersesStep({ isReadOnly, list = [], onSelect, onDelete, onBack, onFinish }) {
     const MAX_ITEMS = 1; 
     const [activeCategory, setActiveCategory] = useState(ROUTINE_CATEGORIES[0] || "strength");
+    const [errorMsg, setErrorMsg] = useState(""); // Replaced alert with local state
 
     const filteredVerses = selectableBibleVerses.filter(v => v.category === activeCategory);
     
@@ -14,12 +15,13 @@ export default function VersesStep({ isReadOnly, list = [], onSelect, onDelete, 
 
     const handleCardClick = (verseObj, isChosen) => {
         if (isReadOnly) return; 
+        setErrorMsg(""); // Clear errors on interaction
 
         if (isChosen) {
             onDelete(); 
         } else {
             if (isLimitReached) {
-                alert("You can only select one focus verse per day. Click your current choice to deselect it first.");
+                setErrorMsg("You can only select one focus verse per day. Remove your current choice first.");
                 return;
             }
             onSelect(verseObj);
@@ -36,10 +38,20 @@ export default function VersesStep({ isReadOnly, list = [], onSelect, onDelete, 
     return (
         <div className="reflections-section" role="region" aria-label="Bible Verse Selection Step">
             <button className="back-btn" type="button" onClick={onBack}>
-                ← Back to Gratitude
+                <span aria-hidden="true">← </span>Back to Gratitude
             </button>
 
-            <h3>Focus Verse ({list.length}/{MAX_ITEMS})</h3>
+            <h3>
+                Focus Verse <span aria-hidden="true">({list.length}/{MAX_ITEMS})</span>
+                <span className="sr-only">, {list.length} of {MAX_ITEMS} verses selected</span>
+            </h3>
+
+            {/* Accessible inline alert for the selection limit */}
+            {errorMsg && (
+                <p role="alert" className="error-message" style={{ color: "red", textAlign: "center" }}>
+                    {errorMsg}
+                </p>
+            )}
             
             {!isReadOnly ? (
                 <>
@@ -51,16 +63,26 @@ export default function VersesStep({ isReadOnly, list = [], onSelect, onDelete, 
                                 key={cat}
                                 type="button"
                                 role="tab"
+                                id={`tab-${cat}`}
+                                aria-controls={`panel-${cat}`}
                                 aria-selected={activeCategory === cat}
                                 className={`category-tab-btn ${activeCategory === cat ? "active" : ""}`}
-                                onClick={() => setActiveCategory(cat)}
+                                onClick={() => {
+                                    setActiveCategory(cat);
+                                    setErrorMsg("");
+                                }}
                             >
                                 {cat}
                             </button>
                         ))}
                     </div>
 
-                    <div className="verses-selection-grid">
+                    <div 
+                        className="verses-selection-grid"
+                        id={`panel-${activeCategory}`}
+                        role="tabpanel"
+                        aria-labelledby={`tab-${activeCategory}`}
+                    >
                         {filteredVerses.map((v) => {
                             const expectedFormat = `"${v.text}" — ${v.verse}`;
                             const isChosen = list.includes(expectedFormat);
@@ -81,10 +103,10 @@ export default function VersesStep({ isReadOnly, list = [], onSelect, onDelete, 
                                     tabIndex={0} 
                                     aria-pressed={isChosen}
                                     aria-disabled={isLimitReached && !isChosen}
+                                    aria-label={`Verse: ${v.verse}. Text: ${v.text}.${isChosen ? " Selected." : ""}`}
                                 >
-                                    <strong>{v.verse}</strong>
-                                    <p>"{v.text}"</p>
-                                    {isChosen && <span className="sr-only">(Selected)</span>}
+                                    <strong aria-hidden="true">{v.verse}</strong>
+                                    <p aria-hidden="true">"{v.text}"</p>
                                 </div>
                             );
                         })}
@@ -131,7 +153,7 @@ export default function VersesStep({ isReadOnly, list = [], onSelect, onDelete, 
                             cursor: isVerseChosen ? 'pointer' : 'not-allowed'
                         }}
                     >
-                        Finish & Log Routine ✔
+                        Finish & Log Routine <span aria-hidden="true">✔</span>
                     </button>
                 ) : (
                     <button 
@@ -140,10 +162,11 @@ export default function VersesStep({ isReadOnly, list = [], onSelect, onDelete, 
                         onClick={onFinish} 
                         style={{ cursor: "pointer", opacity: 1, backgroundColor: "var(--color-unlocked)" }}
                     >
-                        Return to Dashboard →
+                        Return to Dashboard <span aria-hidden="true">→</span>
                     </button>
                 )}
             </div>
         </div>
     );
 }
+

@@ -2,8 +2,6 @@ export function calculateLockStatuses({
     morningTime,
     nightTime,
     currentTime,
-
-    // 🚀 Updated: Separated morning trackers for clear validation bounds
     morningGratitudeCompleted, 
     morningVerseCompleted,      
     todoCompleted,
@@ -19,7 +17,6 @@ export function calculateLockStatuses({
     const currentNightMins = nHour * 60 + nMin;
 
     // 1. Morning Routine Calculations
-    // 🚀 Check if BOTH individual split phases are marked as done
     const morningFullyDone = morningGratitudeCompleted && morningVerseCompleted;
 
     if (morningFullyDone) {
@@ -32,14 +29,14 @@ export function calculateLockStatuses({
     if (todoCompleted) {
         status.todo = "done";
     } else if (morningFullyDone) { 
-        // 🚀 Fix: The list only unlocks after completing the final verse step
         status.todo = "unlocked";
     }
 
     // 3. Night Routine Calculations
     if (nightCompleted) {
         status.night = "done";
-    } else if (currentMins >= currentNightMins || todoCompleted) {
+    } else if (todoCompleted && (currentMins >= currentNightMins || todoCompleted)) {
+        // 🚀 ACCESSIBILITY FIX: Guarantees user cannot bypass the day's linear flow via clock updates
         status.night = "unlocked";
     }
 
