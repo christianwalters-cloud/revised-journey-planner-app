@@ -9,7 +9,6 @@
   box-sizing: border-box;
 }
 
-/* Ensure the main page heading text shifts correctly with global themes */
 .goals-container .page-title {
   color: var(--text-main);
   text-align: center;
@@ -27,9 +26,9 @@
 /* ==========================================================================
    2. DISPLAY BOARD CARDS (Matching Settings Cards)
    ========================================================================== */
-.display-card-wrapper, 
+.display-card-wrapper,
 .goal-mutation-form {
-  background-color: var(--bg-card); /* Dynamically shifts cards between dark charcoal and pure white */
+  background-color: var(--bg-card);
   border: 0.0625rem solid var(--border-color);
   border-radius: var(--radius-standard, 12px);
   padding: 2.5rem 2rem;
@@ -56,13 +55,19 @@
   border-radius: 4px;
 }
 
-.goal-tag { color: var(--color-unlocked, #007acc); background: rgba(0, 122, 204, 0.1); }
-.why-tag { color: var(--color-done, #4caf50); background: rgba(76, 175, 80, 0.1); }
+.goal-tag {
+  color: var(--color-unlocked, #007acc);
+  background: rgba(0, 122, 204, 0.1);
+}
+.why-tag {
+  color: var(--color-done, #4caf50);
+  background: rgba(76, 175, 80, 0.1);
+}
 
 .display-main-text {
   font-size: 1.4rem;
   font-weight: 600;
-  color: var(--text-main); /* Text adapts smoothly between light and dark modes */
+  color: var(--text-main);
   margin: 0;
 }
 
@@ -93,9 +98,9 @@
 .goal-text-input,
 .goal-textarea-input {
   width: 100%;
-  background-color: #ffffff;   /* Pure white interior canvas for ultimate readability */
-  color: #000000;              /* Solid dark readable value output text */
-  border: 2px solid #000000;   /* Thick solid sharp black framing boundaries */
+  background-color: #ffffff;
+  color: #000000;
+  border: 2px solid #000000;
   border-radius: 8px;
   padding: 12px 16px;
   font-size: 1.05rem;
@@ -106,7 +111,7 @@
 }
 
 .goal-textarea-input {
-  resize: vertical;            /* Allow structural height adjustment but stop horizontal layout breaking */
+  resize: vertical;
   line-height: 1.5;
 }
 
@@ -116,7 +121,6 @@
   box-shadow: 0 0 0 3px rgba(0, 122, 204, 0.2);
 }
 
-/* Dynamic text-zoom counter indicator alignment */
 .character-counter {
   text-align: right;
   font-size: 0.85rem;
@@ -131,8 +135,8 @@
   display: flex;
   flex-direction: row;
   gap: 15px;
-  justify-content: center; /* Beautiful horizontal layout button alignment */
-  width: 100%;             /* Ensures flexbox container spans the full card canvas width */
+  justify-content: center;
+  width: 100%;
   margin-top: 0.5rem;
   box-sizing: border-box;
 }
@@ -144,15 +148,67 @@
   border-radius: 8px;
   cursor: pointer;
   border: none;
-  transition: transform 0.1s ease, filter 0.2s ease;
+  transition:
+    transform 0.1s ease,
+    filter 0.2s ease;
 }
 
-.btn:active { transform: scale(0.97); }
+.btn:active {
+  transform: scale(0.97);
+}
 
-/* Buttons modified to interact dynamically with global themes */
-.btn-edit { background-color: var(--text-main); color: var(--bg-card); }
-.btn-delete { background-color: var(--color-danger, #b71c1c); color: white; }
-.btn-save { background-color: var(--color-done, #2e7d32); color: white; }
-.btn-cancel { background-color: transparent; color: var(--text-muted); border: 1px solid var(--border-color); }
+.btn-edit {
+  background-color: var(--text-main);
+  color: var(--bg-card);
+}
+.btn-delete {
+  background-color: var(--color-danger, #b71c1c);
+  color: white;
+}
+.btn-save {
+  background-color: var(--color-done, #2e7d32);
+  color: white;
+}
+.btn-cancel {
+  background-color: transparent;
+  color: var(--text-muted);
+  border: 1px solid var(--border-color);
+}
 
-.btn:hover { filter: brightness(1.2); }
+.btn:hover {
+  filter: brightness(1.2);
+}
+/* ==========================================================================
+   5. UNIFIED GUEST REDIRECT BANNER (Fixed Specificity Gate)
+   ========================================================================== */
+
+.goals-container .lock-banner-card {
+  padding: 2.5rem !important;
+  background-color: var(--bg-primary) !important;
+  border: 1px dashed var(--border-color) !important;
+  border-radius: 12px !important;
+  text-align: center !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 1.25rem !important;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.goals-container .lock-banner-card h2 {
+  margin: 0 !important;
+  font-size: 1.35rem !important;
+  font-weight: 600 !important;
+  color: var(--text-main) !important;
+  text-align: center !important;
+}
+
+.goals-container .lock-banner-card p {
+  margin: 0 !important;
+  color: var(--text-muted) !important;
+  font-size: 0.95rem !important;
+  line-height: 1.5 !important;
+  max-width: 440px !important;
+  text-align: center !important;
+}

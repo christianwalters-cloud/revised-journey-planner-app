@@ -35,10 +35,10 @@
 .nav-icon {
   width: 24px;         
   height: 24px;        
-  /* 🚀 Dynamically assigns the theme color token until hovered or active */
   color: var(--color-icon);
   fill: var(--color-icon);
   transition: transform 0.2s ease, color 0.2s ease;
+  flex-shrink: 0; 
 }
 
 .nav-link {
@@ -51,9 +51,9 @@
   padding: 0.5rem 0.75rem;
   border-radius: 0.375rem;
   transition: var(--transition-smooth);
+  white-space: nowrap; 
 }
 
-/* Custom internal layout wrapper guarantees smooth flex row distribution */
 .nav-link-visual-content {
   display: flex;
   flex-direction: row;
@@ -86,6 +86,7 @@
 .logo-link {
   font-size: 1.4rem;      
   font-weight: 700;
+  white-space: nowrap; /* 🚀 Ensures your app title stays perfectly on single line */
 }
 
 .logo-link .nav-menu-icon {
@@ -106,7 +107,7 @@
 .nav-link.status-locked:focus-visible {
   background-color: transparent;
   color: var(--text-muted) !important; 
-  outline: none !important; /* Block outline focus ring selection states for locked components */
+  outline: none !important; 
 }
 
 .nav-link.status-locked:hover .nav-menu-icon {
@@ -142,10 +143,10 @@
 }
 
 /* ==========================================================================
-   6. RESPONSIVE MOBILE TOGGLE MECHANICS
+   6. RESPONSIVE MOBILE TOGGLE MECHANICS (Enhanced Breakpoint Gateway)
    ========================================================================== */
 .navbar-toggle-btn {
-  display: none;
+  display: none; 
   flex-direction: column;
   justify-content: space-between;
   width: 24px;
@@ -169,9 +170,9 @@
   transition: transform 0.2s ease, opacity 0.2s ease;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .navbar-toggle-btn {
-    display: flex;
+    display: flex; 
   }
 
   .navbar-toggle-btn.open .hamburger-line:nth-child(1) {
@@ -212,9 +213,88 @@
 
   .navbar-menu .nav-link {
     width: 100%;
-    padding: 12px 24px;
+    padding: 14px 24px;
     box-sizing: border-box;
     justify-content: flex-start;
     border-radius: 0;
+    white-space: nowrap; 
   }
+
+  .nav-link-visual-content {
+    flex-wrap: nowrap; 
+  }
+}
+
+/* ==========================================================================
+   7. CLEAN DESKTOP AUTOMATED HAMBURGER OVERRIDES
+   ========================================================================== */
+.navbar:has(.always-hamburger-drawer) .navbar-toggle-btn {
+  display: flex !important;
+}
+
+.navbar-menu.always-hamburger-drawer {
+  display: none !important; 
+  flex-direction: column !important;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background-color: var(--bg-card, #ffffff);
+  border-bottom: 0.0625rem solid var(--border-color);
+  padding: 1rem 0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  z-index: 99;
+  gap: 0;
+}
+
+.navbar-menu.always-hamburger-drawer.mobile-open {
+  display: flex !important;
+}
+
+.navbar-menu.always-hamburger-drawer li {
+  width: 100%;
+  gap: 0;
+}
+
+.navbar-menu.always-hamburger-drawer .nav-link {
+  width: 100%;
+  padding: 14px 24px;
+  box-sizing: border-box;
+  justify-content: flex-start;
+  border-radius: 0;
+  white-space: nowrap;
+}
+
+.navbar-menu.always-hamburger-drawer .nav-link-visual-content {
+  flex-wrap: nowrap;
+}
+
+/* ==========================================================================
+   8. BUTTON LINK FORMATTER (Matches standard text targets)
+   ========================================================================== */
+button.nav-link.logout-link-action {
+  background: transparent;
+  border: none;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  width: auto;
+  text-align: left;
+  padding: 0.5rem 0.75rem; 
+  border-radius: 0.375rem;
+}
+
+@media (max-width: 1024px) {
+  button.nav-link.logout-link-action {
+    width: 100% !important;
+    padding: 14px 24px !important;
+    border-radius: 0;
+  }
+}
+
+.navbar-menu.always-hamburger-drawer button.nav-link.logout-link-action {
+  width: 100% !important;
+  padding: 14px 24px !important;
+  border-radius: 0;
 }

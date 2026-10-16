@@ -1,0 +1,188 @@
+/* ==========================================================================
+   1. STRUCTURE & CONTAINERS (Bypasses App.css Overrides)
+   ========================================================================== */
+main.page-layout-wrapper {
+  width: 100%;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: flex-start !important;
+  padding: 40px 20px;
+  box-sizing: border-box;
+}
+
+section.routine-container.clarity {
+  width: 100%;
+  max-width: 650px;
+  margin: 0 auto;
+  background-color: var(--bg-card);
+  border: 0.0625rem solid var(--border-color);
+  border-radius: var(--radius-standard, 12px);
+  padding: 2.5rem 2rem;
+  box-sizing: border-box;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 1.5rem;
+  transition: var(--transition-smooth);
+}
+
+/* ==========================================================================
+   2. TOP HALF ROW: PRESSURE TOGGLE (Matches Settings Card Layout)
+   ========================================================================== */
+.emergency-valve-row {
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 2rem;
+  border-top: 1px solid var(--border-color);
+  padding-top: 1.5rem;
+}
+
+.emergency-valve-row .setting-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: flex-start !important;
+}
+
+.emergency-valve-row h2 {
+  font-size: 1.15rem !important;
+  font-weight: 600;
+  margin: 0;
+  text-align: left !important;
+}
+
+.emergency-valve-row p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  text-align: left !important;
+  line-height: 1.4;
+}
+
+/* ==========================================================================
+   3. BOTTOM HALF TEXT BLOCKS (Matches Morning Routine Left Header Style)
+   ========================================================================== */
+.reflections-section {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+}
+
+.reflections-section h3 {
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: var(--text-main);
+  text-align: left !important;
+  margin: 0;
+}
+
+.step-hint {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  text-align: left !important;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* ==========================================================================
+   4. CLARITY CORNER EXPANDED INPUT CABINET (Global Input Mirror Framework)
+   ========================================================================== */
+input.routine-large-frame-input {
+  width: 100% !important;
+
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  border: 2px solid #000000 !important;
+  border-radius: 8px !important;
+  font-size: 1.05rem !important;
+  font-family: inherit !important;
+  outline: none !important;
+  box-sizing: border-box !important;
+  display: block !important;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+
+  padding: 14px 16px 140px 16px !important;
+}
+
+input.routine-large-frame-input:focus {
+  border-color: var(--color-unlocked, #007acc) !important;
+  box-shadow: 0 0 0 3px rgba(0, 122, 204, 0.2) !important;
+}
+
+input.routine-large-frame-input.spiral-focus:focus {
+  border-color: #ef4444 !important;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2) !important;
+}
+
+/* ==========================================================================
+   5. CENTERED MOTOR ACTION CONTROL BUTTONS (Matches Morning Buttons Row)
+   ========================================================================== */
+.center-btn-wrapper {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  width: 100%;
+  margin-top: 1.5rem;
+  box-sizing: border-box;
+}
+
+.back-btn,
+.complete-btn {
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  border: none;
+  transition:
+    transform 0.1s ease,
+    filter 0.2s ease;
+}
+
+.back-btn:active,
+.complete-btn:active {
+  transform: scale(0.97);
+}
+
+.back-btn {
+  background-color: transparent;
+  color: var(--text-muted);
+  border: 1px solid var(--border-color);
+}
+
+.back-btn:hover {
+  background-color: var(--bg-primary);
+  color: var(--text-main);
+}
+
+.complete-btn {
+  color: #ffffff;
+}
+
+.complete-btn:disabled {
+  opacity: 0.5 !important;
+  cursor: not-allowed !important;
+  transform: none !important;
+}
+
+.back-btn:hover,
+.complete-btn:hover {
+  filter: brightness(1.1);
+}
+
+@keyframes stepInlineFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

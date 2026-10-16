@@ -1,0 +1,147 @@
+/* ==========================================================================
+   MONTHLY REPORT DASHBOARD CARD EXTENSIONS
+   ========================================================================== */
+.monthly-report-page {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.monthly-card-body {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.5rem;
+  width: 100%;
+  align-items: start;
+}
+
+.overview-summary-block {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-standard, 16px);
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+  box-sizing: border-box;
+}
+
+.overview-summary-block:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.05);
+}
+
+.overview-summary-block:has(.safety-tag) {
+  border-left: 4px solid #ef4444 !important;
+}
+
+.badge-tag.safety-tag {
+  align-self: flex-start;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.05rem;
+  padding: 0.35rem 0.65rem;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.overview-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.overview-item {
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  border-left: 3px solid var(--border-color);
+  background-color: var(--bg-primary);
+}
+
+.history-toggle-section {
+  grid-column: 1 / -1;
+  width: 100%;
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.detailed-logs-wrapper {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  text-align: left;
+  margin-top: 2rem;
+  animation: stepFadeIn 0.3s ease;
+}
+
+.compact-ledger-block {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.compact-ledger-block h3 {
+  font-size: 1.1rem;
+  margin-top: 0;
+  margin-bottom: 1rem;
+  color: var(--text-main);
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 0.5rem;
+}
+/* ==========================================================================
+   REPORT CARDS INNER SPECIFICITY
+   ========================================================================== */
+
+/* 🌟 MAIN ACHIEVEMENTS CARD CORES */
+.overview-summary-block:has(.goal-tag) {
+  border-left: 4px solid var(--color-unlocked, #007acc);
+}
+
+.overview-item.win-item {
+  border-left-color: var(--color-unlocked, #007acc);
+  background-color: rgba(0, 122, 204, 0.04);
+}
+
+/* 👥 RECURRING COUNSEL (FRIEND PERSPECTIVE) MODIFIERS */
+.overview-summary-block:has([style*="#10b981"]) {
+  border-left: 4px solid #10b981 !important;
+}
+
+/* 📖 SCRIPTURAL ANCHORS MODIFIERS */
+.overview-summary-block:has([style*="#8b5cf6"]) {
+  border-left: 4px solid #8b5cf6 !important;
+}
+
+/* ⚠️ COGNITIVE PATTERNS WORD COUNTER LISTS */
+.overview-item.struggle-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-left-color: var(--color-error, #d32f2f);
+  background-color: rgba(211, 47, 47, 0.02);
+}
+
+.pattern-badge {
+  background-color: var(--color-error, #d32f2f);
+  color: #ffffff;
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 0.2rem 0.5rem;
+  border-radius: 20px;
+  line-height: 1;
+}
+
+.empty-msg {
+  color: var(--text-muted, #888888);
+  font-style: italic;
+  font-size: 0.95rem;
+  padding: 0.5rem 0;
+}

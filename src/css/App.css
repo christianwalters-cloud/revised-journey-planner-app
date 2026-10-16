@@ -1,7 +1,9 @@
 /* ==========================================================================
    1. GLOBAL RESET & BASE STYLES
    ========================================================================== */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -10,9 +12,10 @@
 body {
   background-color: var(--bg-primary);
   color: var(--text-main);
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   transition: var(--transition-smooth);
-  min-height: 100vh;             
+  min-height: 100vh;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -25,19 +28,18 @@ body {
   --text-main: #212529;
   --text-muted: #6c757d;
   --border-color: #dee2e6;
-  
-  /* Icon Base Design Token */
-  --color-icon: #212529; /* Dark icons for light theme readability */
-  
-  --color-locked: #6c757d;        
-  --color-unlocked: #007bff;      
+
+  --color-icon: #212529;
+
+  --color-locked: #6c757d;
+  --color-unlocked: #007bff;
   --color-done: #2ec4b6;
   --color-danger: #e63946;
-  
+
   --radius-standard: 12px;
-  --transition-smooth: background-color 0.25s ease-in-out, 
-                       color 0.25s ease-in-out, 
-                       border-color 0.25s ease-in-out;
+  --transition-smooth:
+    background-color 0.25s ease-in-out, color 0.25s ease-in-out,
+    border-color 0.25s ease-in-out;
 }
 
 body.dark-theme {
@@ -46,13 +48,12 @@ body.dark-theme {
   --text-main: #f8f9fa;
   --text-muted: #a0a0a0;
   --border-color: #333333;
-  
-  /* 🚀 THEME ACCESSIBILITY FIX: Forces pure white graphics in dark layout layers */
-  --color-icon: #ffffff; 
-  
+
+  --color-icon: #ffffff;
+
   --color-locked: #555555;
-  --color-unlocked: #4da3ff;     
-  --color-done: #39e3d4;         
+  --color-unlocked: #4da3ff;
+  --color-done: #39e3d4;
 }
 
 body.light-theme {
@@ -62,8 +63,8 @@ body.light-theme {
   --text-muted: #6c757d;
   --border-color: #dee2e6;
   --color-icon: #212529;
-  --color-locked: #6c757d;        
-  --color-unlocked: #007bff;      
+  --color-locked: #6c757d;
+  --color-unlocked: #007bff;
   --color-done: #2ec4b6;
 }
 
@@ -80,7 +81,7 @@ body.light-theme {
   width: 100% !important;
   display: flex !important;
   flex-direction: column !important;
-  align-items: center !important;    
+  align-items: center !important;
 }
 
 .navbar {
@@ -88,16 +89,15 @@ body.light-theme {
 }
 
 .page-content {
-  width: 90% !important;            
-  max-width: 1200px !important;     
-  margin-top: 40px !important;      
-  margin-left: auto !important; /* Centred layout block strategy */
+  width: 90% !important;
+  max-width: 1200px !important;
+  margin-top: 40px !important;
+  margin-left: auto !important;
   margin-right: auto !important;
   display: flex !important;
   flex-direction: column !important;
 }
 
-/* Standard structural flex block layouts across parent views */
 .page-content > div,
 .page-content > main,
 .page-content > section {
@@ -110,7 +110,7 @@ body.light-theme {
 /* ==========================================================================
    4. SCREEN READER & ACCESSIBILITY ACCESS OVERRIDES
    ========================================================================== */
-/* Kills dynamic UI animation latency project-wide if accessibility tag fires */
+
 html.sr-accessible *,
 html.sr-accessible *::before,
 html.sr-accessible *::after {
@@ -118,7 +118,6 @@ html.sr-accessible *::after {
   animation: none !important;
 }
 
-/* Clear visual focus indicator styling across the entire project for keyboard navigation */
 *:focus-visible {
   outline: 3px solid var(--color-unlocked, #007bff) !important;
   outline-offset: 2px !important;
@@ -141,40 +140,44 @@ html.sr-accessible *::after {
 
 /* --- A. BASE / REST STATES --- */
 
-/* LIGHT MODE REST STATE: Clean dark charcoal icons */
+/* LIGHT MODE REST STATE: dark charcoal icons */
 body.light-theme .routine-card-icon,
 body.light-theme .nav-menu-icon {
-    filter: brightness(0) opacity(0.85);
-    transition: filter 0.2s ease-in-out, transform 0.2s ease-in-out;
+  filter: brightness(0) opacity(0.85);
+  transition:
+    filter 0.2s ease-in-out,
+    transform 0.2s ease-in-out;
 }
 
-/* DARK MODE REST STATE: Brilliant white icons */
+/* DARK MODE REST STATE: white icons */
 body.dark-theme .routine-card-icon,
 body.dark-theme .nav-menu-icon {
-    filter: brightness(0) invert(1) !important;
-    transition: filter 0.2s ease-in-out, transform 0.2s ease-in-out;
+  filter: brightness(0) invert(1) !important;
+  transition:
+    filter 0.2s ease-in-out,
+    transform 0.2s ease-in-out;
 }
 
-/* --- B. UNIFIED HOVER / FOCUS STATES (Turns exact Brand Blue #007bff) --- */
+/* --- B. HOVER / FOCUS STATES (Turns the button blue) --- */
 .routine-card:not(.status-locked):hover .routine-card-icon,
 .routine-card:not(.status-locked):focus-visible .routine-card-icon,
 .nav-link:not(.status-locked):hover .nav-menu-icon,
 .nav-link:not(.status-locked):focus-visible .nav-menu-icon {
-    /* Decoupled math shifts both dark and white assets into #007bff dynamically */
-    filter: invert(34%) sepia(85%) saturate(2815%) hue-rotate(204deg) brightness(101%) contrast(105%) !important;
+  /* Decoupled math shifts both dark and white assets into #007bff dynamically */
+  filter: invert(34%) sepia(85%) saturate(2815%) hue-rotate(204deg)
+    brightness(101%) contrast(105%) !important;
 }
 
-/* --- C. LOCKED HOVER PROTECTION (Keeps them low contrast) --- */
+/* --- C. LOCKED HOVER PROTECTION/locked nav items (Keeps them low contrast) --- */
 
 /* Light Mode Locked Hover */
 body.light-theme .routine-card.status-locked:hover .routine-card-icon,
 body.light-theme .nav-link.status-locked:hover .nav-menu-icon {
-    filter: brightness(0) opacity(0.3) !important;
+  filter: brightness(0) opacity(0.3) !important;
 }
 
 /* Dark Mode Locked Hover */
 body.dark-theme .routine-card.status-locked:hover .routine-card-icon,
 body.dark-theme .nav-link.status-locked:hover .nav-menu-icon {
-    filter: brightness(0) invert(1) opacity(0.35) !important;
+  filter: brightness(0) invert(1) opacity(0.35) !important;
 }
-

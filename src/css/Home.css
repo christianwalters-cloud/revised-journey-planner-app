@@ -15,13 +15,13 @@
 }
 
 .dashboard-grid {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    justify-content: center;
-    align-items: stretch;
-    gap: 20px;
-    width: 100%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: stretch;
+  gap: 20px;
+  width: 100%;
 }
 
 /* ==========================================================================
@@ -29,7 +29,7 @@
    ========================================================================== */
 .routine-card {
   flex: 1;
-  background-color: var(--bg-card); /* Adapts automatically between #1e1e1e and #ffffff */
+  background-color: var(--bg-card);
   border: 0.0625rem solid var(--border-color);
   border-radius: var(--radius-standard);
   padding: 2.5rem 2rem;
@@ -38,7 +38,6 @@
   transition: var(--transition-smooth);
 }
 
-/* Custom internal layout wrapper guarantees smooth vertical flex distribution */
 .card-visual-content {
   display: flex;
   flex-direction: column;
@@ -51,7 +50,7 @@
 .routine-card h2 {
   font-size: 1.35rem;
   font-weight: 600;
-  color: var(--text-main); /* Flips cleanly between dark charcoal and light grey */
+  color: var(--text-main);
   margin: 0;
   text-align: center;
 }
@@ -65,10 +64,12 @@
 .routine-card-icon {
   width: 54px !important;
   height: 54px !important;
-  /* 🚀 Automatically shifts the SVG silhouette token color to white in dark mode */
-  color: var(--color-icon); 
+
+  color: var(--color-icon);
   fill: currentColor;
-  transition: transform 0.2s ease, color 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    color 0.2s ease;
 }
 
 .card-status-indicator {
@@ -83,11 +84,10 @@
    3. CARD INTERACTION STATES & STATUS BADGES
    ========================================================================== */
 .routine-card.status-locked {
-  opacity: 0.35; /* Meets target contrast visibility guidelines for disabled views */
+  opacity: 0.35;
   cursor: not-allowed;
 }
 
-/* Explicitly blocks highlight coloring states from bleeding into locked components */
 .routine-card.status-locked:hover,
 .routine-card.status-locked:focus-visible {
   transform: none !important;
@@ -101,7 +101,6 @@
   color: var(--color-icon) !important;
 }
 
-/* Valid active interaction rules for unlocked or completed routine dashboard items */
 .routine-card:not(.status-locked):hover,
 .routine-card:not(.status-locked):focus-visible {
   transform: translateY(-4px);
@@ -128,6 +127,123 @@
   border-color: var(--color-done);
 }
 
-.status-badge.locked { color: var(--text-muted); }
-.status-badge.unlocked { color: var(--color-unlocked); }
-.status-badge.complete { color: var(--color-done); font-weight: bold; }
+.status-badge.locked {
+  color: var(--text-muted);
+}
+.status-badge.unlocked {
+  color: var(--color-unlocked);
+}
+.status-badge.complete {
+  color: var(--color-done);
+  font-weight: bold;
+}
+
+/*==========================================================================
+   4. Win Flashback Card
+   ========================================================================== */
+
+.flashback-banner-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.65);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  padding: 20px;
+  backdrop-filter: blur(4px);
+}
+
+.flashback-card {
+  background-color: var(--color-surface, #ffffff);
+  color: var(--color-text, #333333);
+  padding: 2rem;
+  border-radius: 16px;
+  max-width: 500px;
+  width: 100%;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  animation: modalPopIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.dark-mode .flashback-card {
+  background-color: #1e1e1e;
+  color: #f5f5f5;
+  border: 1px solid #333333;
+}
+
+.flashback-card h2 {
+  color: #ffb703;
+  margin-top: 0;
+  font-size: 1.6rem;
+}
+
+.flashback-text {
+  font-size: 1.25rem;
+  font-style: italic;
+  margin: 1.5rem 0 0.5rem 0;
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+.flashback-date {
+  display: block;
+  color: #777777;
+  margin-bottom: 2rem;
+  font-size: 0.9rem;
+}
+
+.dark-mode .flashback-date {
+  color: #aaaaaa;
+}
+
+.flashback-close-btn {
+  background-color: #ffb703;
+  color: #000000;
+  border: none;
+  padding: 12px 24px;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  transition:
+    transform 0.1s ease,
+    background-color 0.2s ease;
+  width: 100%;
+}
+
+.flashback-close-btn:hover {
+  background-color: #fb8500;
+  transform: scale(1.02);
+}
+
+.flashback-close-btn:active {
+  transform: scale(0.98);
+}
+
+@keyframes modalPopIn {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* ==========================================================================
+   5. FLASHBACK CONFIRMATION ALERT OVERRIDE
+   ========================================================================== */
+.flashback-thanks-msg,
+.confirmation-toast-text {
+  color: var(--color-unlocked, #007acc) !important;
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: 0.015rem;
+  margin-top: 0.75rem;
+  display: block;
+}

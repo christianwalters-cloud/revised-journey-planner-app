@@ -79,12 +79,11 @@ section.routine-container.morning h1 {
   width: 100%;
 }
 
-/* 🚀 Perfect Match: White interior canvas with thick black borders */
 .todo-row input[type="text"] {
   flex: 1;
-  background-color: #ffffff !important;   /* Pure white interior canvas */
-  color: #000000 !important;              /* Solid dark readable value output text */
-  border: 2px solid #000000 !important;   /* Thick solid sharp black framing boundaries */
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  border: 2px solid #000000 !important;
   border-radius: 8px;
   padding: 10px 16px;
   font-size: 1.05rem;
@@ -121,7 +120,9 @@ ul.todo-list li.todo-list-item,
 ul.todo-list li {
   list-style: none !important;
   list-style-type: none !important;
-  background-color: var(--bg-primary); /* Shading offsets nested lists slightly */
+  background-color: var(
+    --bg-primary
+  ); /* Shading offsets nested lists slightly */
   border: 1px solid var(--border-color);
   border-radius: 8px;
   padding: 1rem 1.25rem;
@@ -134,7 +135,8 @@ ul.todo-list li {
   box-sizing: border-box;
 }
 
-.item-text, .verse-logged-text {
+.item-text,
+.verse-logged-text {
   color: var(--text-main);
   font-size: 1rem;
   line-height: 1.4;
@@ -167,7 +169,7 @@ ul.todo-list li {
   transition: var(--transition-smooth);
 }
 
-.category-tab-btn.active, 
+.category-tab-btn.active,
 .category-tab-btn:hover {
   background-color: var(--text-main);
   color: var(--bg-card);
@@ -188,7 +190,9 @@ ul.todo-list li {
   padding: 1.25rem;
   cursor: pointer;
   text-align: left;
-  transition: transform 0.15s ease, border-color 0.15s ease;
+  transition:
+    transform 0.15s ease,
+    border-color 0.15s ease;
 }
 
 .verse-selection-card:hover {
@@ -245,7 +249,9 @@ ul.todo-list li {
   border-radius: 8px;
   cursor: pointer;
   border: none;
-  transition: transform 0.1s ease, filter 0.2s ease;
+  transition:
+    transform 0.1s ease,
+    filter 0.2s ease;
 }
 
 .todo-row button[type="button"]:active,
@@ -254,7 +260,6 @@ ul.todo-list li {
   transform: scale(0.97);
 }
 
-/* Keyboard indicators matching standard theme layouts */
 .todo-row button[type="button"]:focus-visible,
 .back-btn:focus-visible,
 .next-step-btn:focus-visible,
